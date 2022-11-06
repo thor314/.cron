@@ -2,7 +2,7 @@
 # Back up dotfiles and run dotbot
 # set this up in cron to run every 10 minutes
 
-echo "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)\n" >> /home/thor/cron/cronlog-files
+echo "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)\n" >> /home/thor/cron/log/files
 
 cd /home/thor/.files
 # Need to start an ssh agent to be able to push to github

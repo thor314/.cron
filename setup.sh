@@ -2,7 +2,7 @@
 # Back up setup 
 # set this up in cron to run every 10 minutes
 
-echo "cronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)" >> /home/thor/cron/cronlog-setup
+echo "cronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)" >> /home/thor/cron/log/setup
 
 cd /home/thor/.setup
 eval $(ssh-agent) 

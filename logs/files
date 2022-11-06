@@ -29,3 +29,16 @@ Enter passphrase for /home/thor/.ssh/id_ed25519: Identity added: /home/thor/.ssh
 Everything up-to-date
 Enter passphrase for /home/thor/.ssh/id_ed25519: Identity added: /home/thor/.ssh/id_ed25519 (thorck@pm.me)
 Everything up-to-date
+Enter passphrase for /home/thor/.ssh/id_ed25519: Identity added: /home/thor/.ssh/id_ed25519 (thorck@pm.me)
+Everything up-to-date
+Enter passphrase for /home/thor/.ssh/id_ed25519: Identity added: /home/thor/.ssh/id_ed25519 (thorck@pm.me)
+Everything up-to-date
+/home/thor/cron/files.sh: 5: cannot create /home/thor/cron/log/files: Directory nonexistent
+Enter passphrase for /home/thor/.ssh/id_ed25519: Identity added: /home/thor/.ssh/id_ed25519 (thorck@pm.me)
+Everything up-to-date
+/home/thor/cron/files.sh: 5: cannot create /home/thor/cron/log/files: Directory nonexistent
+Enter passphrase for /home/thor/.ssh/id_ed25519: Identity added: /home/thor/.ssh/id_ed25519 (thorck@pm.me)
+Everything up-to-date
+/home/thor/cron/files.sh: 5: cannot create /home/thor/cron/log/files: Directory nonexistent
+Enter passphrase for /home/thor/.ssh/id_ed25519: Identity added: /home/thor/.ssh/id_ed25519 (thorck@pm.me)
+Everything up-to-date

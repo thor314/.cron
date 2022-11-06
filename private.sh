@@ -2,7 +2,7 @@
 # Back up private dotfiles and run dotbot
 # set this up in cron to run every 10 minutes
 
-echo "cronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)" >> /home/thor/cron/cronlog-private
+echo "cronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)" >> /home/thor/cron/log/private
 
 cd /home/thor/.private
 eval $(ssh-agent) 
