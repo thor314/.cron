@@ -2,4 +2,4 @@
 */10 * * * * sh /home/thor/cron/files.sh 2>> /home/thor/cron/logs/files
 */10 * * * * sh /home/thor/cron/private.sh 2>> /home/thor/cron/logs/private
 */10 * * * * sh /home/thor/cron/setup.sh 2>> /home/thor/cron/logs/setup
-
+*/10 * * * * sh /home/thor/cron/cron.sh 2>> /home/thor/cron/logs/cron
