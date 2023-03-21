@@ -8,7 +8,6 @@ cd /home/thor/cron
 # Need to start an ssh agent to be able to push to github
 if [[ -z "$SSH_AUTH_SOCK" ]] ; then 
   eval $(ssh-agent) 
-  # echo syntaxoverl0rd | ssh-add /home/thor/.ssh/id_ed25519
   ssh-add -k /home/thor/.ssh/id_ed25519_cron
 fi
 
