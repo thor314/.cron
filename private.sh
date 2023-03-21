@@ -2,7 +2,7 @@
 # Back up private dotfiles and run dotbot
 # set this up in cron to run every 10 minutes
 
-echo "cronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)" >> /home/thor/cron/logs/private
+echo -e "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)" >> /home/thor/cron/logs/private
 
 cd /home/thor/.private
 if [[ -z "$SSH_AUTH_SOCK" ]] ; then 

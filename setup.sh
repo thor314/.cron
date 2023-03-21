@@ -2,7 +2,7 @@
 # Back up setup 
 # set this up in cron to run every 10 minutes
 
-echo "cronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)" >> /home/thor/cron/logs/setup
+echo -e "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)" >> /home/thor/cron/logs/setup
 
 cd /home/thor/.setup
 # Need to start an ssh agent to be able to push to github
