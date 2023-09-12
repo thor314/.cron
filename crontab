@@ -4,4 +4,5 @@
 */10 * * * * bash /home/thor/cron/setup.sh 2>> /home/thor/cron/logs/setup
 */10 * * * * bash /home/thor/cron/cron.sh 2>> /home/thor/cron/logs/cron
 0 12 * * * flatpak update --user -y
+0 12 * * * rustup update
 
