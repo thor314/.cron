@@ -15,7 +15,8 @@ end
 
 # Loop through each directory and perform operations
 for dir in $directories
-    cd $dir
+    cd $dir 
+    echo -e "\n visiting $dir \n"
 
     # This will throw errors for oh-my-zsh, this is fine
     git submodule foreach git add --all
@@ -28,6 +29,7 @@ for dir in $directories
     git pull
     git push
 
+    echo -e "\n leaving $dir \n"
 end
 
 # Kill the ssh-agent
