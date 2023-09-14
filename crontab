@@ -1,7 +1,7 @@
 # back up dotfiles and private dotfiles every 10 minutes
-*/10 * * * * bash /home/thor/.cron/git_sync_directories.sh 2>> /home/thor/.cron/logs/sync_dirs.log
-*/10 * * * * bash /home/thor/.cron/sync_updates.sh 2>> /home/thor/.cron/logs/sync_updates.log
-*/2 * * * * bash /home/thor/.cron/clean_home.sh 2>> /home/thor/.cron/logs/clean_home.log
+*/10 * * * * /usr/bin/fish /home/thor/.cron/git_sync_directories.sh 2>> /home/thor/.cron/logs/sync_dirs.log
+*/10 * * * * /usr/bin/fish /home/thor/.cron/sync_updates.sh 2>> /home/thor/.cron/logs/sync_updates.log
+*/2 * * * * /usr/bin/fish /home/thor/.cron/clean_home.sh 2>> /home/thor/.cron/logs/clean_home.log
 # update flatpak modules and rust toolchain every day at noon
 0 12 * * * flatpak update --user -y
 0 12 * * * rustup update
