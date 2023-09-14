@@ -8,16 +8,16 @@ set files_to_remove ~/.bash_history ~/.lesshst ~/.viminfo ~/.wget-hsts ~/.gp_his
 set dirs_to_remove ~/.dotnet ~/.trash ~/.1password
 
 for f in $files_to_remove
-  if test -e $f
-    echo "Removing file: $f"
-    rm $f
-  end
+    if test -e $f
+        echo "Removing file: $f"
+        rm $f
+    end
 end
 
 for d in $dirs_to_remove
-  if test -d $d
-    echo "Removing file: $d"
-    rm $d -r
-  end
+    if test -d $d
+        echo "Removing file: $d"
+        rm $d -r
+    end
 end
 
