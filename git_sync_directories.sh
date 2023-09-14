@@ -20,12 +20,12 @@ for dir in $directories
 
     # This will throw errors for oh-my-zsh, this is fine
     git submodule foreach git add --all
-    git submodule foreach git commit -m "$(hostname)-(date -u +%Y-%m-%d\ %H:%M%Z)"
+    git submodule foreach git commit -m $(hostname)-(date -u +%Y-%m-%d\ %H:%M%Z)
     git submodule foreach git pull
     git submodule foreach git push
 
     git add --all
-    git commit -m "$(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)"
+    git commit -m $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)
     git pull
     git push
 
