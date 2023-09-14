@@ -30,7 +30,6 @@ for dir in $directories
     git push
 
     echo -e "\n leaving $dir \n" >> /home/thor/.cron/logs/sync_dirs.log
-    echo -e "\n leaving $dir \n" >> /home/thor/.cron/logs/tmp
 end
 
 # Kill the ssh-agent
