@@ -16,7 +16,7 @@ end
 
 for d in $dirs_to_remove
     if test -d $d
-        echo "Removing file: $d"
+        echo "Removing dir: $d"
         rm $d -r
     end
 end
