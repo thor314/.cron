@@ -9,14 +9,14 @@ set dirs_to_remove ~/.dotnet ~/.trash ~/.1password
 
 for f in $files_to_remove
     if test -e $f
-        echo "Removing file: $f"
+        echo -e "Removing file: $f" >> /home/thor/.cron/logs/clean_home.log
         rm $f
     end
 end
 
 for d in $dirs_to_remove
     if test -d $d
-        echo "Removing dir: $d"
+        echo -e "Removing dir: $d" >> /home/thor/.cron/logs/clean_home.log
         rm $d -r
     end
 end
