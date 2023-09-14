@@ -13,7 +13,7 @@ echo -e "test 1" >> /home/thor/.cron/logs/tmp
 if test -z "$SSH_AUTH_SOCK"
     eval $(ssh-agent)
     ssh-add -k /home/thor/.ssh/id_ed25519_cron
-  echo -e "test 2" >> /home/thor/.cron/logs/tmp
+    echo -e "test 2" >> /home/thor/.cron/logs/tmp
 end
 
 # Loop through each directory and perform operations
