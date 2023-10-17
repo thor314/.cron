@@ -10,7 +10,9 @@ echo -e "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)\n" >> /home/thor/.
 eval $(ssh-agent) 
 ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
 export SSH_AUTH_SOCK
-export SSH_AGENT_PID
+fish set -x SSH_AUTH_SOCK /tmp/ssh-agent.socket
+fish set -x SSH_AGENT_PID (pgrep ssh-agent)
+fish set -x DISPLAY :0
 
 ssh-add /home/thor/.ssh/id_ed25519_cron 2>> /home/thor/log
 
