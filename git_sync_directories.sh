@@ -30,7 +30,7 @@ for dir in $directories
     git submodule foreach git add --all
     git submodule foreach git commit -m $(hostname)-(date -u +%Y-%m-%d\ %H:%M%Z)
     git submodule foreach git pull
-    git submodule foreach git push
+    git submodule foreach git push && notify-send "Success" "successful"
 
     git add --all
     git commit -m $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)
