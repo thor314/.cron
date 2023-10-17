@@ -14,6 +14,7 @@ ssh-add -l >> /home/thor/.cron/log
 eval $(ssh-agent) 
 ssh-add /home/thor/.ssh/id_ed25519
 
+
 # Output SSH agent status
 echo "SSH Agent Status:" >> /home/thor/log
 ssh-agent -s >> /home/thor/log
