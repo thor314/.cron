@@ -12,7 +12,7 @@ echo "before" >> /home/thor/.cron/log
 ssh-add -l >> /home/thor/.cron/log
 
 eval $(ssh-agent) 
-ssh-add /home/thor/.ssh/id_ed25519
+ssh-add /home/thor/.ssh/id_ed25519_cron
 
 # Output SSH agent status
 rm /home/thor/log
