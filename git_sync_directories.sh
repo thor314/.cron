@@ -45,10 +45,8 @@ for dir in $directories
     echo -e "\n leaving $dir \n" >> /home/thor/.cron/logs/sync_dirs.log
 end
 
-# Kill the ssh-agent
-# ssh-agent -k
-# set -e SSH_AUTH_SOCK
-# set -e SSH_AGENT_PID
+# Kill the ssh-agent, don't leak resources
+ssh-agent -k
 
 /home/thor/.local/bin/dotbot -c /home/thor/.files/install.conf.yaml
 /home/thor/.local/bin/dotbot -c /home/thor/.private/install.conf.yaml
