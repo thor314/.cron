@@ -7,13 +7,21 @@ set directories /home/thor/.files /home/thor/.setup /home/thor/.cron /home/thor/
 
 echo -e "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)\n" >> /home/thor/.cron/logs/sync_dirs.log
 
+# start an ssh agent to talk to github and add the key
 echo "before" >> /home/thor/.cron/log
 ssh-add -l >> /home/thor/.cron/log
-# start an ssh agent to talk to github and add the key
-eval $(ssh-agent -s) >> /home/thor/.cron/log
-ssh-add -k /home/thor/.ssh/id_ed25519_cron >> /home/thor/.cron/log
-echo "after" >> /home/thor/.cron/log
-ssh-add -l >> /home/thor/.cron/log
+
+eval $(ssh-agent) 
+ssh-add /home/thor/.ssh/id_ed25519_cron 
+
+# Output SSH agent status
+echo "SSH Agent Status:" >> /home/thor/log
+ssh-agent -s >> /home/thor/log
+
+# Output loaded SSH keys
+echo "SSH Keys:" >> /home/thor/log
+ssh-add -l >> /home/thor/log
+
 
 # Loop through each directory and perform operations
 for dir in $directories
