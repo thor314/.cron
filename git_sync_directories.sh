@@ -8,10 +8,15 @@ set directories /home/thor/.files /home/thor/.setup /home/thor/.cron /home/thor/
 echo -e "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)\n" >> /home/thor/.cron/logs/sync_dirs.log
 
 # # Need to start an ssh agent to be able to push to GitHub
-if test -z "$SSH_AUTH_SOCK"
-    eval $(ssh-agent)
-    ssh-add -k /home/thor/.ssh/id_ed25519_cron
-end
+# if test -z "$SSH_AUTH_SOCK"
+#     # eval $(ssh-agent)
+#     ssh-add -k /home/thor/.ssh/id_ed25519_cron
+# end
+echo "before" >> /home/thor/.cron/log
+ssh-add -l >> /home/thor/.cron/log
+ssh-add -k /home/thor/.ssh/id_ed25519_cron
+echo "after" >> /home/thor/.cron/log
+ssh-add -l >> /home/thor/.cron/log
 
 # Loop through each directory and perform operations
 for dir in $directories
