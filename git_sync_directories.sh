@@ -12,6 +12,8 @@ ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
 export SSH_AUTH_SOCK
 export SSH_AGENT_PID
 
+ssh-add /home/thor/.ssh/id_ed25519_cron 2>> /home/thor/log
+
 # Output SSH agent status
 rm /home/thor/log
 echo "SSH Agent Status:" >> /home/thor/log
