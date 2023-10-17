@@ -22,6 +22,9 @@ ssh-agent -s >> /home/thor/log
 echo "SSH Keys:" >> /home/thor/log
 ssh-add -l >> /home/thor/log
 
+echo "whoami: $(whoami)" >> /home/thor/log
+echo $(whoami) >> /home/thor/log
+
 
 # Loop through each directory and perform operations
 for dir in $directories
