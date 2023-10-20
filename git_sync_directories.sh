@@ -8,11 +8,13 @@ set directories /home/thor/.files /home/thor/.setup /home/thor/.cron /home/thor/
 rm /home/thor/.cron/logs/sync_dirs.log
 echo -e "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)\n" >> /home/thor/.cron/logs/sync_dirs.log
 
+# disable noise errors that X display cannot be opened
 fish set -x DISPLAY :0
+
 rm /home/thor/log
 ssh-agent >> /home/thor/log
-eval $(ssh-agent) >> /home/thor/log
-ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
+eval $(ssh-agent) && ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
+
 # export SSH_AUTH_SOCK
 # fish set -x SSH_AUTH_SOCK /tmp/ssh-agent.socket
 # fish set -x SSH_AGENT_PID (pgrep ssh-agent)
