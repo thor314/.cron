@@ -12,9 +12,8 @@ echo -e "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)\n" >> /home/thor/.
 fish set -x DISPLAY :0
 
 rm /home/thor/log
-ssh-agent >> /home/thor/log
-eval $(ssh-agent) && ssh-add /home/thor/.ssh/id_ed25519_cron 
-ssh-add -k /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
+eval $(ssh-agent) >> /home/thor/log
+ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
 
 # export SSH_AUTH_SOCK
 # fish set -x SSH_AUTH_SOCK /tmp/ssh-agent.socket
