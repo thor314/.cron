@@ -42,12 +42,12 @@ for dir in $directories
     git submodule foreach git add --all
     git submodule foreach git commit -m $(hostname)-(date -u +%Y-%m-%d\ %H:%M%Z)
     git submodule foreach git pull
-    git submodule foreach git push && notify-send "Success" "successful"
+    git submodule foreach git push 
 
     git add --all
     git commit -m $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)
     git pull
-    git push
+    git push && notify-send "Success" "successful"
 
     echo -e "\n leaving $dir \n" >> /home/thor/.cron/logs/sync_dirs.log
 end
