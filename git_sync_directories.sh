@@ -13,7 +13,7 @@ fish set -x DISPLAY :0
 
 # fish shell-specific:
 eval (ssh-agent -c) >> /home/thor/.cron/logs/sync_dirs.log
-ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/.cron/logs/sync_dirs.log
+ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/.cron/logs/sync_dirs.log ^&1
 
 # bash shell equivalent: 
 # eval $(ssh-agent) >> /home/thor/log
