@@ -11,28 +11,13 @@ echo -e "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)\n" >> /home/thor/.
 # disable noise errors that X display cannot be opened
 fish set -x DISPLAY :0
 
-rm /home/thor/log
+# fish shell-specific:
+eval (ssh-agent -c) >> /home/thor/.cron/logs/sync_dirs.log
+ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/.cron/logs/sync_dirs.log
+
+# bash shell equivalent: 
 # eval $(ssh-agent) >> /home/thor/log
 # ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
-eval (ssh-agent -c) >> /home/thor/log
-ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log ^&1
-
-# export SSH_AUTH_SOCK
-# fish set -x SSH_AUTH_SOCK /tmp/ssh-agent.socket
-# fish set -x SSH_AGENT_PID (pgrep ssh-agent)
-
-# ssh-add /home/thor/.ssh/id_ed25519_cron 2>> /home/thor/log
-
-# # Output SSH agent status
-# rm /home/thor/log
-# echo "SSH Agent Status:" >> /home/thor/log
-# ssh-agent -s >> /home/thor/log
-
-# # Output loaded SSH keys
-# echo "SSH Keys:" >> /home/thor/log
-# ssh-add -l >> /home/thor/log
-# ssh-add -l 2>> /home/thor/log
-# echo "whoami: $(whoami)" >> /home/thor/log
 
 # Loop through each directory and perform operations
 for dir in $directories
