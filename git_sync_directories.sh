@@ -39,7 +39,7 @@ for dir in $directories
 end
 
 # Kill the ssh-agent, don't leak resources
-ssh-agent -k
+ssh-agent -k >> /home/thor/.cron/logs/sync_dirs.log
 
 /home/thor/.local/bin/dotbot -c /home/thor/.files/install.conf.yaml
 /home/thor/.local/bin/dotbot -c /home/thor/.private/install.conf.yaml
