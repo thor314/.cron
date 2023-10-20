@@ -9,7 +9,8 @@ rm /home/thor/.cron/sync_dirs.log
 echo -e "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)\n" >> /home/thor/.cron/logs/sync_dirs.log
 
 fish set -x DISPLAY :0
-eval $(ssh-agent) 
+rm /home/thor/log
+eval $(ssh-agent) >> /home/thor/log
 ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
 # export SSH_AUTH_SOCK
 # fish set -x SSH_AUTH_SOCK /tmp/ssh-agent.socket
