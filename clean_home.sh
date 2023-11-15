@@ -2,6 +2,7 @@
 # remove crap from my home 
 
 set LOGFILE '/home/thor/.cron/logs/clean_home.log'
+tail -n 100 $LOGFILE > $LOGFILE
 rm $LOGFILE 
 
 echo -e "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)\n" >> $LOGFILE
