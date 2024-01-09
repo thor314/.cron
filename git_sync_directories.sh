@@ -6,7 +6,7 @@
 set LOGFILE /home/thor/.cron/logs/sync_dirs.log
 set dirs /home/thor/.files /home/thor/.setup /home/thor/.cron /home/thor/.private /home/thor/r/tmpl
 set dirs $dirs /home/thor/.keep /home/thor/img/backgrounds /home/thor/img/profile /home/thor/blog 
-set dirs $dirs /home/thor/img/official-images
+set dirs $dirs /home/thor/img/official-images /home/thor/invoice /home/thor/official
 
 rm $LOGFILE
 
