@@ -1,10 +1,13 @@
 #!/usr/bin/env fish
-# Back up dotfiles and run dotbot for multiple directories
+# Back up dotfiles and run dotbot for multiple dirs
 # Set this up in cron to run every 10 minutes
 
 # List of directories to process
 set LOGFILE /home/thor/.cron/logs/sync_dirs.log
-set directories /home/thor/.files /home/thor/.setup /home/thor/.cron /home/thor/.private /home/thor/r/tmpl /home/thor/.keep /home/thor/img/backgrounds /home/thor/img/profile /home/thor/blog
+set dirs /home/thor/.files /home/thor/.setup /home/thor/.cron /home/thor/.private /home/thor/r/tmpl
+set dirs $dirs /home/thor/.keep /home/thor/img/backgrounds /home/thor/img/profile /home/thor/blog 
+set dirs $dirs /home/thor/img/official-images
+
 rm $LOGFILE
 
 echo -e "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)\n" >> $LOGFILE 
@@ -21,7 +24,7 @@ ssh-add /home/thor/.ssh/id_ed25519_cron >> $LOGFILE ^&1
 # ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
 
 # Loop through each directory and perform operations
-for dir in $directories
+for dir in $dirs
     cd $dir 
     echo -e "\n visiting $dir \n" >> $LOGFILE
 
