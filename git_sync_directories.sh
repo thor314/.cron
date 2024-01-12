@@ -2,7 +2,9 @@
 # Back up dotfiles and run dotbot for multiple dirs
 # Set this up in cron to run every 10 minutes
 
+# disable noisy errors that X display cannot be opened
 set LOGFILE $HOME/.cron/logs/sync_dirs.log
+set -x DISPLAY :0 &>> $LOGFILE
 set COMMIT_MSG "$(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)"
 
 # List of directories to process
@@ -19,12 +21,10 @@ echo -e "cronlog: $COMMIT_MSG"    &>> $LOGFILE
 echo "updating $dirs..."          &>> $LOGFILE
 echo ============================ &>> $LOGFILE
 
-# disable noise errors that X display cannot be opened
-fish set -x DISPLAY :0 &>> $LOGFILE
-
 # fish shell-specific:
 eval (ssh-agent -c) &>> $LOGFILE
-ssh-add /home/thor/.ssh/id_ed25519_cron &>> $LOGFILE 
+ssh-add $HOME/.ssh/id_ed25519_cron &>> $LOGFILE 
+echo 3 && sleep 5
 # In bash, this is equivalent to (don't uncomment or remove)
 # eval $(ssh-agent) >> /home/thor/log
 # ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
@@ -61,8 +61,8 @@ for dir in $dirs
     echo "--------------------------------"
 end &>> $LOGFILE 
 
-echo -e "Finished syncing" 
-echo "==================================="
+echo -e "Finished syncing" &>> $LOGFILE
+echo "===================================" &>> $LOGFILE
 # Kill the ssh-agent, don't leak resources
 ssh-agent -k &>> $LOGFILE
 
