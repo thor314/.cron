@@ -2,12 +2,14 @@
 # Back up dotfiles and run dotbot for multiple dirs
 # Set this up in cron to run every 10 minutes
 
-# List of directories to process
 set LOGFILE $HOME/.cron/logs/sync_dirs.log
-set dirs $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep 
-set dirs $dirs $HOME/projects # contains submodules
-set dirs $dirs $HOME/.files # contains submodules
 set COMMIT_MSG "$(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)"
+
+# List of directories to process
+set dirs $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep 
+# these dirs contain submodules
+set dirs $dirs $HOME/projects 
+set dirs $dirs $HOME/.files 
 
 # rotate the log file, could be more sophisticated, but..meh
 rm $LOGFILE 
@@ -36,12 +38,13 @@ for dir in $dirs
     if test -f .gitmodules
       echo "********************************"
       echo "updating $dir submodules" 
+      # need the git diff line, or submodule will exit early
       git submodule foreach "
         echo -e \"visiting $dir\" 
-        git add . && 
-        git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"; 
-        git pull && 
-        git push
+        git add . 
+        git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
+        git pull 
+        git push && notify-send "Submodule updated" "successfully updated $dir" 
         echo \"--------------------------------\"
         "
       echo "updated $dir submodules" 
@@ -52,7 +55,7 @@ for dir in $dirs
     git add --all 
     git commit -m $COMMIT_MSG
     git pull 
-    git push && notify-send "Success" "successfully updated $dir" 
+    git push && notify-send "Directory updated" "successfully updated $dir" 
 
     echo -e "leaving $dir " 
     echo "--------------------------------"
