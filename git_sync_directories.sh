@@ -4,6 +4,16 @@
 
 # disable noisy errors that X display cannot be opened
 set LOGFILE $HOME/.cron/logs/sync_dirs.log
+
+# rotate the log file, could be more sophisticated, but..meh
+rm ${LOGFILE}.6
+mv ${LOGFILE}.5 "${LOGFILE}.6"
+mv ${LOGFILE}.4 "${LOGFILE}.5"
+mv ${LOGFILE}.3 "${LOGFILE}.4"
+mv ${LOGFILE}.2 "${LOGFILE}.3"
+mv ${LOGFILE}.1 "${LOGFILE}.2"
+mv ${LOGFILE}   "${LOGFILE}.1"
+
 set -x DISPLAY :0 &>> $LOGFILE
 set COMMIT_MSG "$(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)"
 
@@ -12,9 +22,6 @@ set dirs $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep
 # these dirs contain submodules
 set dirs $dirs $HOME/projects 
 set dirs $dirs $HOME/.files 
-
-# rotate the log file, could be more sophisticated, but..meh
-rm $LOGFILE 
 
 echo ============================ &>> $LOGFILE
 echo -e "cronlog: $COMMIT_MSG"    &>> $LOGFILE 
@@ -43,20 +50,17 @@ for dir in $dirs
         echo -e \"visiting $dir\" 
         git add . 
         git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
-        git pull 
-        git push && notify-send "Submodule updated" "successfully updated $dir" 
+        git pull && git push && notify-send "Submodule updated" "successfully updated $dir" 
         echo \"--------------------------------\"
         "
       echo "updated $dir submodules" 
       echo "********************************"
     end
 
-    echo  "updating $dir" 
+    echo "updating $dir" 
     git add --all 
-    git commit -m $COMMIT_MSG
-    git pull 
-    git push && notify-send "Directory updated" "successfully updated $dir" 
-
+    git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
+    git pull && git push && notify-send "Directory updated" "successfully updated $dir" 
     echo -e "leaving $dir " 
     echo "--------------------------------"
 end &>> $LOGFILE 
