@@ -3,10 +3,12 @@
 # Set this up in cron to run every 10 minutes
 
 # List of directories to process
-set LOGFILE /home/thor/.cron/logs/sync_dirs.log
-set dirs /home/thor/.files /home/thor/.setup /home/thor/.cron /home/thor/.private /home/thor/r/tmpl
-set dirs $dirs /home/thor/.keep /home/thor/img/backgrounds /home/thor/img/profile /home/thor/blog 
-set dirs $dirs /home/thor/img/official-images /home/thor/invoice /home/thor/official
+set LOGFILE $HOME/.cron/logs/sync_dirs.log
+set dirs $HOME/.files $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep 
+set dirs $dirs $HOME/img/backgrounds $HOME/img/profile $HOME/img/official-images 
+set dirs $dirs $HOME/blog $HOME/obsidian-setup
+# to remove:
+set dirs $dirs $HOME/invoice $HOME/official 
 
 rm $LOGFILE
 
