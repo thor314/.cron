@@ -1,6 +1,7 @@
 #!/usr/bin/env fish
 # Back up dotfiles and run dotbot for multiple dirs
 # Set this up in cron to run every 10 minutes
+# Failed to execute child process “dbus-launch” (No such file or directory)
 
 set LOGFILE $HOME/.cron/logs/sync_dirs.log
 fish ~/.cron/help_scripts/rotate_logs.sh
@@ -60,7 +61,3 @@ echo -e "Finished syncing" &>> $LOGFILE
 echo "===================================" &>> $LOGFILE
 # Kill the ssh-agent, don't leak resources
 ssh-agent -k &>> $LOGFILE
-
-/home/thor/.local/bin/dotbot -c /home/thor/.files/install.conf.yaml &>> $LOGFILE
-/home/thor/.local/bin/dotbot -c /home/thor/.private/install.conf.yaml &>> $LOGFILE
-
