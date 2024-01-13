@@ -2,11 +2,10 @@
 # Maintain the list of resources I want auto-published every day out of my Obsidian vault
 
 set LOGFILE ~/.cron/logs/publish.log
-fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
 # disable noise errors that X display cannot be opened
 set -x DISPLAY :0 &>> $LOGFILE
 set DATE  "$(date -u +%Y-%m-%d\ %H:%M%Z)"
-set COMMIT "$(hostname)-$DATE"
+set COMMIT_MSG "$(hostname)-$DATE"
 set TMP_FILE "/tmp/cron-publish-$DATE"
 
 function copy_file 
@@ -92,5 +91,16 @@ function get_line_numbers
     echo $START_LINE $END_LINE
 end
 
+function publish
+    fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
+    echo ============================ &>> $LOGFILE
+    echo -e "cronlog: $COMMIT_MSG"    &>> $LOGFILE
+    echo "publishing......"          &>> $LOGFILE
+    echo ============================ &>> $LOGFILE
 
-copy_file ~/tmp/j-2024-01-12.md ~/tmp/j-2024-01-13.md "## test"
+    copy_file "~/obsidian/writing/personal/Getting Started with Obsidian.md" "~/projects/obsidian-setup/Getting Started with Obsidian.md" "## Part Three: All the plugins"
+
+    # copy_file ~/tmp/j-2024-01-12.md ~/tmp/j-2024-01-13.md "## test"
+end
+
+
