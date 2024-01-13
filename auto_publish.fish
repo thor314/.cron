@@ -4,7 +4,7 @@
 set LOGFILE ~/.cron/logs/publish.log
 # disable noise errors that X display cannot be opened
 set -x DISPLAY :0 &>> $LOGFILE
-set DATE  "$(date -u +%Y-%m-%d\ %H:%M%Z)"
+set DATE  "$(date -u +%Y-%m-%d-%H:%M%Z)"
 set COMMIT_MSG "$(hostname)-$DATE"
 set TMP_FILE "/tmp/cron-publish-$DATE"
 
@@ -12,6 +12,9 @@ function copy_file
     set SOURCE_FILE $argv[1]
     set DEST_FILE $argv[2]
     set HEADING $argv[3]
+    echo "source: $SOURCE_FILE"
+    echo "dest: $DEST_FILE"
+    echo "heading: $HEADING"
 
     if not test -f $SOURCE_FILE
         echo "Source file does not exist"
@@ -106,16 +109,16 @@ function get_line_numbers
 end
 
 function publish
-    fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
     echo ============================ 
     echo -e "cronlog: $COMMIT_MSG"    
     echo "publishing......"          
     echo ============================ 
 
-    copy_file "~/obsidian/writing/personal/Getting Started with Obsidian.md" "~/projects/obsidian-setup/Getting Started with Obsidian.md" "## Part Three: All the plugins"
+    copy_file ~/obsidian/writing/personal/Getting\ Started\ with\ Obsidian.md  ~/projects/obsidian-setup/Getting\ Started\ with\ Obsidian.md  '## Part Three: All the plugins'
 
     # copy_file ~/tmp/j-2024-01-12.md ~/tmp/j-2024-01-13.md "## test"
 end  
 
+fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
 publish &>> $LOGFILE
 
