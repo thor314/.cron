@@ -31,30 +31,20 @@ function copy_file
         return 1
     end
 
-    # Extract the section from the source file to a tmp file
-    set heading_type (echo $SOURCE_HEADING | cut -f1 --delimiter=" " )
-    set start_line (rg --no-heading --line-number "^$SOURCE_HEADING" $SOURCE_FILE | cut -f1 -d:)
-    set section_candidate (rg --no-heading --line-number "^$heading_type " $SOURCE_FILE | rg --no-heading "^$start_line:" -A1 | cut --delimiter=":" -f1)
-    set n_matches (printf '%s\n' $section_candidate | count)
-
-    if test $n_matches -eq 2
-        # get the next heading line number, subtract one
-        set end_line (echo $section_candidate | cut -f2 --delimiter=" ")
-        set end_line (math "$end_line - 1")
-    else
-        # heading was last in file, cut to the end of the file
-        set end_line $(wc -l < "$SOURCE_FILE")
-    end
-    set n_total_lines (math "$end_line - $start_line + 1")
-
     # extract the section to a tmp file
-    echo "cutting from line $start_line to $end_line in $SOURCE_FILE"
-    # sed -n "$start_line,$end_line p" $SOURCE_FILE > $TMP_FILE
-    echo (head $SOURCE_FILE -n $end_line | tail -n $n_total_lines)
-    echo -e "\n--\n"
-    head $SOURCE_FILE -n $end_line | tail -n $n_total_lines > $TMP_FILE
+    set LINE_NUMBERS (get_line_numbers $SOURCE_FILE $SOURCE_HEADING)
+    set START_LINE (echo $LINE_NUMBERS | cut --delimiter=" " -f1)
+    set END_LINE (echo $LINE_NUMBERS | cut --delimiter=" " -f2)
+    set N_TOTAL_LINES (math "$END_LINE - $START_LINE + 1")
+    echo "cutting from line $START_LINE to $END_LINE in $SOURCE_FILE"
+    head $SOURCE_FILE -n $END_LINE | tail -n $N_TOTAL_LINES > $TMP_FILE
+
+    echo we captured:
     cat $TMP_FILE
 
+    # todo: If I eventually get less lazy, maybe handle moving images too 
+
+    
     # # Replace the section in the destination file
     # # This is a bit tricky and might need a more complex solution like a temporary file
     # set temp_file (mktemp)
@@ -70,5 +60,28 @@ function copy_file
     # ' $DEST_FILE > $temp_file
     # mv $temp_file $DEST_FILE
 end
+
+function get_line_numbers
+    set FILE $argv[1]
+    set HEADING $argv[2]
+    
+    # Extract the section from the source file to a tmp file
+    set H_TYPE (echo $HEADING | cut -f1 --delimiter=" " )
+    set START_LINE (rg --no-heading --line-number "^$HEADING" $FILE | cut -f1 -d:)
+    set SECTION_CANDIDATE (rg --no-heading --line-number "^$H_TYPE " $FILE | rg --no-heading "^$START_LINE:" -A1 | cut --delimiter=":" -f1)
+    set N_MATCHES (printf '%s\n' $SECTION_CANDIDATE | count)
+
+    if test $N_MATCHES -eq 2
+        # get the next heading line number, subtract one
+        set END_LINE (echo $SECTION_CANDIDATE | cut -f2 --delimiter=" ")
+        set END_LINE (math "$END_LINE - 1")
+    else
+        # heading was last in file, cut to the end of the file
+        set END_LINE $(wc -l < "$FILE")
+    end
+    
+    echo $START_LINE $END_LINE
+end
+
 
 copy_file ~/tmp/j-2024-01-12.md ~/tmp/j-2024-01-13.md "## test"
