@@ -31,14 +31,15 @@ function copy_file
             echo "source file $SOURCE_FILE has changed and no heading specified, updating dest file"
             cp $SOURCE_FILE $DEST_FILE
             echo "~-------------------~"
+            return 0
         end
     end
 
-    if not rg -q "^$HEADING\$" $SOURCE_FILE
+    if not rg -q "^$HEADING" $SOURCE_FILE
         echo "Source file does not contain the heading $HEADING"
         return 1
     end
-    if not rg -q "^$HEADING\$" $DEST_FILE
+    if not rg -q "^$HEADING" $DEST_FILE
         echo "Destination file does not contain the heading $HEADING"
         return 1
     end
