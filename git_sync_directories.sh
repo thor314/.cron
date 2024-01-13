@@ -4,7 +4,7 @@
 
 set LOGFILE $HOME/.cron/logs/sync_dirs.log
 fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
-set COMMIT_MSG "$(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)"
+set COMMIT_MSG "$(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)"
 
 # List of directories to process
 set dirs $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep 
