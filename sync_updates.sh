@@ -8,9 +8,11 @@ fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
 function sync 
   set -x DISPLAY :0 
   echo -e "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)\n" 
-
+  echo -e "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   /home/thor/.local/bin/dotbot -c /home/thor/.files/install.conf.yaml 
   /home/thor/.local/bin/dotbot -c /home/thor/.private/install.conf.yaml 
+  echo -e "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  echo -e "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
   fish $HOME/.files/scripts/sync.sh 
 end 
