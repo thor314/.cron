@@ -31,7 +31,6 @@ echo ============================ &>> $LOGFILE
 # fish shell-specific:
 eval (ssh-agent -c) &>> $LOGFILE
 ssh-add $HOME/.ssh/id_ed25519_cron &>> $LOGFILE 
-echo 3 && sleep 5
 # In bash, this is equivalent to (don't uncomment or remove)
 # eval $(ssh-agent) >> /home/thor/log
 # ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
