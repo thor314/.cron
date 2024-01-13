@@ -36,7 +36,7 @@ function copy_file
     set START_LINE (echo $LINE_NUMBERS | cut --delimiter=" " -f1)
     set END_LINE (echo $LINE_NUMBERS | cut --delimiter=" " -f2)
     set N_TOTAL_LINES (math "$END_LINE - $START_LINE + 1")
-    echo "cutting from line $START_LINE to $END_LINE in $SOURCE_FILE"
+    echo "copying from line $START_LINE to $END_LINE in $SOURCE_FILE"
     head $SOURCE_FILE -n $END_LINE | tail -n $N_TOTAL_LINES > $TMP_FILE
     echo we captured:
     cat $TMP_FILE
@@ -61,9 +61,9 @@ function copy_file
         # Replace the lines in $DEST_FILE between $START_LINE and $END_LINE with the lines in $TMP_FILE
         head -n (math $START_LINE - 1) $DEST_FILE > $TMP_FILE.new
         cat $TMP_FILE >> $TMP_FILE.new
-        tail -n (math (count (cat $DEST_FILE)) - $END_LINE) $DEST_FILE >> $TMP_FILE
+        tail -n (math (count (cat $DEST_FILE)) - $END_LINE) $DEST_FILE >> $TMP_FILE.new
 
-        cp $TMP_FILE $DEST_FILE
+        cp $TMP_FILE.new $DEST_FILE
         rm $TMP_FILE.new
     end
     
