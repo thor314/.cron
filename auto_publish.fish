@@ -61,11 +61,8 @@ function copy_file
     # echo "cutting from line $START_LINE to $END_LINE in $DEST_FILE"
     head $DEST_FILE -n $END_LINE | tail -n $N_TOTAL_LINES > $TMP_FILE.old
 
-
-    # end
     if /home/thor/.cargo/bin/difft $TMP_FILE.new $TMP_FILE.old >> /dev/null
-        echo "~-------------------~"
-
+        echo "~----------------------------------------------------------------~"
         echo changes detected in $DEST_FILE
         echo "<<<<<<<<<<<<<<<< replacing section:"
         cat $TMP_FILE.old
@@ -75,12 +72,13 @@ function copy_file
 
         # Replace the lines in $DEST_FILE between $START_LINE and $END_LINE with the lines in $TMP_FILE
         head -n (math $START_LINE - 1) $DEST_FILE > $TMP_FILE.all
-        cat $TMP_FILE >> $TMP_FILE.new
+        cat $TMP_FILE.new >> $TMP_FILE.all
         tail -n (math (count (cat $DEST_FILE)) - $END_LINE) $DEST_FILE >> $TMP_FILE.all
 
         cp $TMP_FILE.all $DEST_FILE
         rm $TMP_FILE.all
-        echo "~-------------------~"
+        echo "$DEST_FILE updated"
+        echo "~----------------------------------------------------------------~"
     end
     
     rm $TMP_FILE.new $TMP_FILE.old
