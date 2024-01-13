@@ -14,4 +14,5 @@ mv ${LOGFILE}   "${LOGFILE}.1"
 set -x DISPLAY :0
 
 echo -e "\ncronlog: $(hostname)-$(date -u +%Y-%m-%d\ %H:%M%Z)\n" >> $LOGFILE
+fish $HOME/.files/scripts/sync.sh
 
