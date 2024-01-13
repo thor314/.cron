@@ -45,15 +45,15 @@ function copy_file
         # heading was last in file, cut to the end of the file
         set end_line $(wc -l < "$SOURCE_FILE")
     end
-    set n_total_lines (math "$end_line - $start_line")
+    set n_total_lines (math "$end_line - $start_line + 1")
 
     # extract the section to a tmp file
     echo "cutting from line $start_line to $end_line in $SOURCE_FILE"
     # sed -n "$start_line,$end_line p" $SOURCE_FILE > $TMP_FILE
-    echo (head -n $end_line | tail -n $n_total_lines)
-    # > $TMP_FILE
-    # sed -n "$start_line,$end_line p" $SOURCE_FILE > $TMP_FILE
-    echo which says: (cat $TMP_FILE)
+    echo (head $SOURCE_FILE -n $end_line | tail -n $n_total_lines)
+    echo -e "\n--\n"
+    head $SOURCE_FILE -n $end_line | tail -n $n_total_lines > $TMP_FILE
+    cat $TMP_FILE
 
     # # Replace the section in the destination file
     # # This is a bit tricky and might need a more complex solution like a temporary file
