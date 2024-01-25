@@ -25,6 +25,7 @@ function update-dirs
     # ssh-add $HOME/.ssh/key-thor-cron # equivalent
     keychain --eval -Q # | source
     keychain --nogui ~/.ssh/key-thor-cron # if no key is not yet known, add key
+    echo known ssh keys: (keychain -L)
 
     # Loop through each directory and perform operations
     for dir in $dirs ; update-dir $dir ; end 
