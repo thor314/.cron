@@ -62,9 +62,10 @@ function update-submodules
       echo -e \"visiting $dir\" 
       git add . 
       git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
-      git pull && git push && notify-send \"Submodule updated\" \"successfully updated $dir\" 
+      git pull && git push 
       echo \"--------------------------------\"
       "
+      # && notify-send \"Submodule updated\" \"successfully updated $dir\" 
     echo "updated $dir submodules" 
     echo "********************************"
 end
