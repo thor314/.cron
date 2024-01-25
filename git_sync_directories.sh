@@ -22,12 +22,11 @@ function update-dirs
     echo ============================ 
 
     # start an ssh agent
-    keychain --eval -Q | source
-    keychain --nogui ~/.ssh/key-thor-cron # if no key is not yet known, add key
     # ssh-add $HOME/.ssh/key-thor-cron # equivalent
+    # keychain --eval -Q | source
+    keychain --nogui ~/.ssh/key-thor-cron # if no key is not yet known, add key
 
     # Loop through each directory and perform operations
-    echo dirs is $dirs
     for dir in $dirs ; update-dir $dir ; end 
 
     echo -e "Finished syncing" 
@@ -38,7 +37,8 @@ function update-dirs
 end
 
 function update-dir 
-    set dir $argv[1] ; cd $dir 
+    set dir $argv[1] 
+    cd $dir 
     echo "--------------------------------"
     echo -e "visiting $dir" 
 
