@@ -47,7 +47,7 @@ function update-dir
     git add --all 
     git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
     git pull && git push 
-    notify-send "Directory updated" "successfully updated $dir" 
+    # notify-send "Directory updated" "successfully updated $dir" # mid
     echo "leaving $dir " 
 
     echo "--------------------------------"
