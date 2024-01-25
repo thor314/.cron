@@ -9,10 +9,9 @@ set COMMIT_MSG "$(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)"
 # List of directories to process
 set dirs $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep 
 # these dirs contain submodules
-set dirs $dirs $HOME/projects 
-set dirs $dirs $HOME/.files 
+set dirs $dirs $HOME/projects $HOME/.files 
 
-function update_dirs
+function update-dirs
     set dirs $argv
     # disable noisy errors that X display cannot be opened
     set -x DISPLAY :0 
@@ -23,25 +22,16 @@ function update_dirs
     echo ============================ 
 
     # fish shell-specific:
-    eval (ssh-agent -c)
+    # eval (ssh-agent -c)
+    # start an ssh agent
     ssh-add $HOME/.ssh/key-thor-cron 
+    keychain --eval --quiet -Q ssh | source
     # In bash, this is equivalent to (don't uncomment or remove)
     # eval $(ssh-agent) >> /home/thor/log
     # ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
 
     # Loop through each directory and perform operations
-    for dir in $dirs
-        cd $dir 
-        echo "--------------------------------"
-        echo -e "visiting $dir" 
-
-        if test -f .gitmodules
-          update_submodules $dir
-        end
-
-        update_dir $dir
-        echo "--------------------------------"
-    end 
+    for dir in $dirs ; update-dir $dir ; end 
 
     echo -e "Finished syncing" 
     echo "===================================" 
@@ -49,7 +39,23 @@ function update_dirs
     ssh-agent -k 
 end
 
-function update_submodules
+function update-dir 
+    set dir $argv[1] ; cd $dir 
+    echo "--------------------------------"
+    echo -e "visiting $dir" 
+
+    if test -f .gitmodules; update-submodules $dir ; end
+    echo "updating $dir" 
+    git add --all 
+    git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
+    git pull && git push && notify-send "Directory updated" "successfully updated $dir" 
+    echo "leaving $dir " 
+
+      update-dir $dir
+      echo "--------------------------------"
+end
+
+function update-submodules
     set dir $argv[1]
     echo "********************************"
     echo "updating $dir submodules" 
@@ -65,13 +71,4 @@ function update_submodules
     echo "********************************"
 end
 
-function update_dir
-    set dir $argv[1]
-    echo "updating $dir" 
-    git add --all 
-    git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
-    git pull && git push && notify-send "Directory updated" "successfully updated $dir" 
-    echo "leaving $dir " 
-end
-
-update_dirs $dirs &>> $LOGFILE
+update-dirs $dirs &>> $LOGFILE
