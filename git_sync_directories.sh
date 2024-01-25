@@ -7,9 +7,9 @@ fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
 set COMMIT_MSG "$(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)"
 
 # List of directories to process
-set dirs $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep 
+set DIRS $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep 
 # these dirs contain submodules
-set dirs $dirs $HOME/projects $HOME/.files 
+set DIRS $DIRS $HOME/projects $HOME/.files 
 
 function update-dirs
     set dirs $argv
@@ -45,18 +45,12 @@ function update-dir
     if test -f .gitmodules; update-submodules $dir ; end
     echo "updating $dir" 
     git add --all 
-    echo "a"
     git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
-    echo "b"
-    git pull 
-    echo "e"
-    git push 
-    echo "c" 
+    git pull && git push 
     notify-send "Directory updated" "successfully updated $dir" 
     echo "leaving $dir " 
 
-      update-dir $dir
-      echo "--------------------------------"
+    echo "--------------------------------"
 end
 
 function update-submodules
