@@ -25,12 +25,13 @@ function update-dirs
     # eval (ssh-agent -c)
     # start an ssh agent
     ssh-add $HOME/.ssh/key-thor-cron 
-    keychain --eval --quiet -Q ssh | source
+    keychain --eval ssh | source
     # In bash, this is equivalent to (don't uncomment or remove)
     # eval $(ssh-agent) >> /home/thor/log
     # ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
 
     # Loop through each directory and perform operations
+    echo dirs is $dirs
     for dir in $dirs ; update-dir $dir ; end 
 
     echo -e "Finished syncing" 
