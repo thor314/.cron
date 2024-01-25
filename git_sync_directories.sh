@@ -21,12 +21,10 @@ function update-dirs
     echo "updating $dirs..."          
     echo ============================ 
 
-    # start an ssh agent
-    # ssh-add $HOME/.ssh/key-thor-cron # equivalent
-    eval (keychain --eval -Q)
-    # gckeychain --eval -Q | source
-    keychain --nogui ~/.ssh/key-thor-cron # if no key is not yet known, add key
-    echo known ssh keys: (keychain -L)
+    # start an ssh agent. Avoid change to this section. Debugging ssh key permissions is annoying.
+    eval (keychain --eval -Q) # output keychain ssh-agent shell info into this script and source it
+    keychain --nogui ~/.ssh/key-thor-cron # make sure the cron key is added
+    echo known ssh keys: (keychain -L) # this should output some keys. If not, we're borked.
 
     # Loop through each directory and perform operations
     for dir in $dirs ; update-dir $dir ; end 
