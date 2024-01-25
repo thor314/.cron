@@ -23,7 +23,7 @@ function update-dirs
 
     # start an ssh agent
     # ssh-add $HOME/.ssh/key-thor-cron # equivalent
-    keychain --eval -Q | source
+    # keychain --eval -Q | source
     keychain --nogui ~/.ssh/key-thor-cron # if no key is not yet known, add key
 
     # Loop through each directory and perform operations
