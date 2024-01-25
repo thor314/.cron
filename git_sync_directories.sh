@@ -21,14 +21,10 @@ function update-dirs
     echo "updating $dirs..."          
     echo ============================ 
 
-    # fish shell-specific:
-    # eval (ssh-agent -c)
     # start an ssh agent
-    ssh-add $HOME/.ssh/key-thor-cron 
-    keychain --eval ssh | source
-    # In bash, this is equivalent to (don't uncomment or remove)
-    # eval $(ssh-agent) >> /home/thor/log
-    # ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
+    keychain --eval -Q | source
+    keychain --nogui ~/.ssh/key-thor-cron # if no key is not yet known, add key
+    # ssh-add $HOME/.ssh/key-thor-cron # equivalent
 
     # Loop through each directory and perform operations
     echo dirs is $dirs
@@ -36,8 +32,9 @@ function update-dirs
 
     echo -e "Finished syncing" 
     echo "===================================" 
+    # 2024-01-25 keychain update - this should no longer be necessary
     # Kill the ssh-agent, don't leak resources
-    ssh-agent -k 
+    # ssh-agent -k 
 end
 
 function update-dir 
@@ -48,8 +45,14 @@ function update-dir
     if test -f .gitmodules; update-submodules $dir ; end
     echo "updating $dir" 
     git add --all 
+    echo "a"
     git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
-    git pull && git push && notify-send "Directory updated" "successfully updated $dir" 
+    echo "b"
+    git pull 
+    echo "e"
+    git push 
+    echo "c" 
+    notify-send "Directory updated" "successfully updated $dir" 
     echo "leaving $dir " 
 
       update-dir $dir
