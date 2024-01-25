@@ -69,4 +69,4 @@ function update-submodules
     echo "********************************"
 end
 
-update-dirs $dirs &>> $LOGFILE
+update-dirs $DIRS &>> $LOGFILE
