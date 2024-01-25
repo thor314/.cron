@@ -24,7 +24,7 @@ function update_dirs
 
     # fish shell-specific:
     eval (ssh-agent -c)
-    ssh-add $HOME/.ssh/id_ed25519_cron 
+    ssh-add $HOME/.ssh/key-thor-cron 
     # In bash, this is equivalent to (don't uncomment or remove)
     # eval $(ssh-agent) >> /home/thor/log
     # ssh-add /home/thor/.ssh/id_ed25519_cron >> /home/thor/log 2>&1
