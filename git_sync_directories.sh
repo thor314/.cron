@@ -23,7 +23,7 @@ function update-dirs
 
     # start an ssh agent. Avoid change to this section. Debugging ssh key permissions is annoying.
     eval (keychain --eval -Q) # output keychain ssh-agent shell info into this script and source it
-    keychain --nogui ~/.ssh/id_ed25519 # make sure the cron key is added
+    keychain --nogui ~/.ssh/id_ed25519 -Q -q # make sure the cron key is added
     echo known ssh keys: (keychain -L) # this should output some keys. If not, we're borked.
 
     # Loop through each directory and perform operations
