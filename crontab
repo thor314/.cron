@@ -2,7 +2,7 @@
 */10 * * * * /usr/bin/fish /home/thor/.cron/git_sync_directories.sh >> /home/thor/.cron/logs/sync_dirs.log 2>&1
 * */12 * * * /usr/bin/fish /home/thor/.cron/sync_updates.sh >> /home/thor/.cron/logs/sync_updates.log 2>&1
 */1 * * * * /usr/bin/fish /home/thor/.cron/clean_home.sh >> /home/thor/.cron/logs/clean_home.log 2>&1
-* */12 * * * /usr/bin/fish /home/thor/.cron/publish.fish >> /home/thor/.cron/logs/publish.log 2>&1
+# * */12 * * * /usr/bin/fish /home/thor/.cron/publish.fish >> /home/thor/.cron/logs/publish.log 2>&1
 # update flatpak modules and rust toolchain every 8 hours
 0 */8 * * * flatpak update --user -y 2>> /home/thor/.cron/logs/flatpak.log
 0 */8 * * * rustup update 2>> /home/thor/.cron/logs/flatpak.log
