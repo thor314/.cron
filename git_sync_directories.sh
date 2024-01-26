@@ -59,7 +59,7 @@ function update-submodules
     echo "updating $dir submodules" 
     # need the git diff line, or submodule will exit early
     git submodule foreach "
-      echo -e \"visiting $dir\" 
+      echo \"visiting $dir\" 
       git add . 
       git checkout main
       git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
