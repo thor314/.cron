@@ -15,9 +15,9 @@ set DIRS_NOCOMMIT $HOME/projects
 function ssh-ensure
   # start an ssh agent. Avoid change to this section. Debugging ssh key permissions is annoying.
   # output keychain ssh-agent shell info into this script and source it
-  eval (keychain --eval -Q) 
+  eval (keychain --eval -Q) # -Q is "quick" not quiet
   # make sure the cron key is added
-  keychain --nogui ~/.ssh/id_ed25519 -Q -q 
+  keychain --nogui ~/.ssh/id_ed25519 -Q
   # this should output some keys. If not, we're borked.
   echo known ssh keys: (keychain -L) 
 end
