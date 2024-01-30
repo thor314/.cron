@@ -12,15 +12,16 @@ set DIRS $DIRS $HOME/.files
 # do not create noisy sync commits in projects, do this manually
 set DIRS_NOCOMMIT $HOME/projects 
 
-function ssh-ensure
-  # start an ssh agent. Avoid change to this section. Debugging ssh key permissions is annoying.
-  # output keychain ssh-agent shell info into this script and source it
-  eval (keychain --eval -Q) # -Q is "quick" not quiet
-  # make sure the cron key is added
-  keychain --nogui ~/.ssh/id_ed25519 -Q
-  # this should output some keys. If not, we're borked.
-  echo known ssh keys: (keychain -L) 
-end
+# this can be run in config.fish, uncomment if ever ssh failure issues
+# function ssh-ensure
+#   # start an ssh agent. Avoid change to this section. Debugging ssh key permissions is annoying.
+#   # output keychain ssh-agent shell info into this script and source it
+#   eval (keychain --eval -Q) # -Q is "quick" not quiet
+#   # make sure the cron key is added
+#   keychain --nogui ~/.ssh/id_ed25519 -Q
+#   # this should output some keys. If not, we're borked.
+#   echo known ssh keys: (keychain -L) 
+# end
 
 function update-dirs
   set dirs $argv[1..-2]
