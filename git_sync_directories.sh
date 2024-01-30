@@ -90,6 +90,6 @@ function update-submodules
   echo "********************************"
 end
 
-ssh-ensure                   &>> $LOGFILE
+# ssh-ensure                   &>> $LOGFILE
 update-dirs $DIRS          0 &>> $LOGFILE
 update-dirs $DIRS_NOCOMMIT 1 &>> $LOGFILE
