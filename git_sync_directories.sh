@@ -72,7 +72,6 @@ function update-submodules
     git submodule foreach "
       echo \"visiting $dir\" 
       echo \"nocommit\"
-      git checkout main
       git pull && git push 
       echo \"--------------------------------\"
     "
