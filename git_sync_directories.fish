@@ -2,7 +2,7 @@
 # Back up dotfiles and run dotbot for multiple dirs
 # Set this up in cron to run every 10 minutes
 
-set LOGFILE $HOME/.cron/logs/sync_dirs.log
+set LOGFILE $HOME/.cron/logs/git_sync_directories.log
 fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
 set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
 
