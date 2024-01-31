@@ -6,11 +6,14 @@
 set LOGFILE $HOME/.cron/logs/git_merkle.log
 fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
 set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
+source $HOME/.files/fish/functions.fish
 
 # List of directories to process
 set DIR $HOME/gm
 # disable noisy errors that X display cannot be opened
 set -x DISPLAY :0 
+# don't commit in these internal dirs
+set COMMIT_WHITELIST blog .files
 
 # this can be run in config.fish, uncomment if ever ssh failure issues
 # function ssh-ensure
@@ -28,16 +31,26 @@ function recurse-to-bottom -d "Recursively update git submodules"
     # recurse another layer for each module
     set -l modules (git config --file .gitmodules --get-regexp path | awk '{ print $2 }')
     for m in $modules
-      echo "from $dir, entering submodule: $m"
-      recurse-to-bottom $m
+      if test -d $m
+        echo "from $(pwd), entering submodule: $m"
+        recurse-to-bottom $m
+      else 
+        echo -e "\n**WARNING**: thor sloppy, many such cases. $m does not exist\n"
+      end
     end
 
     # All submodules are now updated. 
     # We are in an intermediate submodule container, not a leaf.
     # if there are changes, create and push a commit.
     set -l is_changes (git status --porcelain)
-    if test -n "$is_changes"
-      update -m # do commit in internal nodes
+    set -l thisdir (path_to_name (pwd))
+    if test -n "$is_changes" 
+      if not contains $thisdir $COMMIT_WHITELIST
+        update -m # do commit in internal nodes
+      else 
+        echo "$thisdir is in commit whitelist, no commits"
+        update 
+      end
     else
       echo "no changes detected in $(pwd)."
     end
@@ -56,7 +69,7 @@ function update -d "Update git submodule"
   # commit if there changes here and we are instructed to do so
   # otherwise we are in a leaf, and just leave it at pulling.
   echo updating from (pwd)
-  argparse 'm/modify' -- $argv[1]
+  argparse 'm/modify' -- $argv
   or return 1
 
   git checkout (__git.default_branch) # stay on the main branch
