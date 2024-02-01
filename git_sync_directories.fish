@@ -75,13 +75,16 @@ function update-submodules
       echo \"visiting $dir\" 
       echo \"nocommit\"
       git pull && git push 
+      git checkout main
+      git pull && git push 
       echo \"--------------------------------\"
     "
   else
     git submodule foreach "
       echo \"visiting $dir\" 
-      git add . 
+      git pull && git push 
       git checkout main
+      git add . 
       git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
       git pull && git push 
       echo \"--------------------------------\"
