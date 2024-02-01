@@ -13,7 +13,7 @@ set DIR $HOME/gm
 # disable noisy errors that X display cannot be opened
 set -x DISPLAY :0 
 # don't commit in these internal dirs
-set COMMIT_WHITELIST blog .files
+set COMMIT_WHITELIST empty
 
 # this can be run in config.fish, uncomment if ever ssh failure issues
 # function ssh-ensure
