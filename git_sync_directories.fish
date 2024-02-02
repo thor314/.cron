@@ -25,16 +25,15 @@ function update-dir
     pushd $dir && echo "--------------------------------"
     echo -e "$dir: visiting" 
 
+    git symbolic-ref -q HEAD >> /dev/null || git checkout main
     if test -f .gitmodules; update-submodules $dir $_flag_c ; end
 
     if not set -q _flag_c
       echo "$dir: nocommit"
-      git symbolic-ref -q HEAD >> /dev/null || git checkout main
       git push && git pull 
     else
       if test -z "$(git status --porcelain)"
         echo "$dir: commit"
-        git symbolic-ref -q HEAD >> /dev/null || git checkout main
         git add --all && git commit -m \"$COMMIT_MSG\" 
         git push && git pull 
       end
@@ -52,11 +51,6 @@ function update-submodules
   echo "updating $dir submodules" 
   git pull 
   git submodule update --init
-
-  if not git symbolic-ref -q HEAD >> /dev/null # detached HEAD state, checkout main
-    git checkout main
-  # else ; set branch_name (git symbolic-ref --short HEAD)
-  end
 
   if not set -q _flag_c
     git submodule foreach "

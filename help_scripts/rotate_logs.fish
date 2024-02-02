@@ -3,11 +3,20 @@
 
 set LOGFILE $argv[1]
 
-rm $LOGFILE.6
-mv $LOGFILE.5 "$LOGFILE.6"
-mv $LOGFILE.4 "$LOGFILE.5"
-mv $LOGFILE.3 "$LOGFILE.4"
-mv $LOGFILE.2 "$LOGFILE.3"
-mv $LOGFILE.1 "$LOGFILE.2"
-mv $LOGFILE   "$LOGFILE.1"
+if test -f $LOGFILE.9
+  rm $LOGFILE.9
+end
+
+for i in (seq 8 -1 1)
+  if test -f $LOGFILE.i
+    set i_ (math "$i+1")
+    mv $LOGFILE.i $LOGFILE.i_
+  end
+end
+
+if test -f $LOGFILE 
+  mv $LOGFILE "$LOGFILE.1"
+else 
+  echo "no such logfile: $LOGFILE"
+end
 

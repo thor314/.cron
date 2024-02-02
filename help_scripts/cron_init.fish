@@ -3,7 +3,7 @@
 set LOGFILE $argv[1]
 # rotate the logs
 if not test -z $LOGFILE 
-  fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
+  fish ~/.cron/help_scripts/rotate_logs.fish $LOGFILE
 else; echo "no log file provided"; end
 # disable noisy errors that X display cannot be opened
 set -x DISPLAY :0 

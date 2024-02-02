@@ -10,7 +10,7 @@ function sync
   /home/thor/.local/bin/dotbot -c /home/thor/.private/install.conf.yaml 
   echo -e "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
-  fish $HOME/.cron/help_scripts/sync.fish 
+  # fish $HOME/.cron/help_scripts/sync.fish 
 end 
 
 sync &>> $LOGFILE
