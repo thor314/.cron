@@ -23,27 +23,36 @@ set COMMIT_WHITELIST empty
 #   # This will not work! keychain --eval -Q
 # end
 
+# Assuming that tree is mirror-only, not used to work in:
+# On the way down: updating
+## INTERNAL NODE: switch from commit hash to main. All internal nodes have only the main branch.
+## Pull from upstream if there have been any changes on other machines, and update.
+## `git pull && git submodule update --init` # not recursive: need to pull again first. Init new submodules.
+## descend and repeat until a leaf is reached. 
+## LEAF NODE: We do not work in the leaf nodes, so we should not have to do anything there. 
+# On the way up: committing
+## INTERNAL NODE: We should now be confident that all internal nodes are updated. 
+## `git commit -m $COMMIT_MSG` && git push
 function recurse-to-bottom -d "Recursively update git submodules"
   set dir $argv[1]
   pushd $dir
 
-  if test -f .gitmodules 
-    # recurse another layer for each module
+  if test -f .gitmodules ### INTERNAL NODE
+    # On the way down: updating
+    git checkout main && git pull && git submodule update --init
     set -l modules (git config --file .gitmodules --get-regexp path | awk '{ print $2 }')
     for m in $modules
-      if test -d $m
+      if test -d $m 
         echo "from $(pwd), entering submodule: $m"
         recurse-to-bottom $m
-      else 
-        echo -e "\n**WARNING**: thor sloppy, many such cases. $m does not exist\n"
+      else # submodule has been removed incorrectly: removed directory but not .gitmodules entry
+        echo -e "\n**WARNING**: thor sloppy, many such cases. $m must be removed from .gitmodules manually.\n"
       end
     end
 
-    # All submodules are now updated. 
-    # We are in an intermediate submodule container, not a leaf.
-    # if there are changes, create and push a commit.
+    # On the way up: committing
     set -l is_changes (git status --porcelain)
-    set -l thisdir (path_to_name (pwd))
+    set -l thisdir (tk-path-to-name (pwd))
     if test -n "$is_changes" 
       if not contains $thisdir $COMMIT_WHITELIST
         update -m # do commit in internal nodes
@@ -54,7 +63,7 @@ function recurse-to-bottom -d "Recursively update git submodules"
     else
       echo "no changes detected in $(pwd)."
     end
-  else
+  else ### LEAF NODE
     # Don't commit in the leaves.
     update 
   end
@@ -96,6 +105,7 @@ function update -d "Update git submodule"
 end
 
 if test -d $HOME/gm
+  source $HOME/.files/fish/functions.fish # tk-path-to-name function
   # ssh-ensure                 &>> $LOGFILE
   recurse-to-bottom $HOME/gm &>> $LOGFILE
 else
