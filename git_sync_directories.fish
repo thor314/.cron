@@ -68,8 +68,7 @@ function update-submodules
   else
     git submodule foreach "
       echo \"$dir: visiting submodule, commit\" 
-      git add . 
-      git commit -m \"$COMMIT_MSG\"
+      git add --all . && git commit -m \"$COMMIT_MSG\"
       git push && git pull
       echo \"--------------------------------\"
     " 
@@ -80,8 +79,7 @@ function update-submodules
 end
 
 if set -q DIRS 
-  # disable noisy errors that X display cannot be opened
-  set -x DISPLAY :0 
+  set -x DISPLAY :0 # disable noisy errors that X display cannot be opened
   fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
 
   echo ============================ 
