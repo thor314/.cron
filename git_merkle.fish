@@ -4,24 +4,12 @@
 # Set this up in cron to run every 10 minutes
 
 set LOGFILE $HOME/.cron/logs/git_merkle.log
-fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
 set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
-source $HOME/.files/fish/functions.fish
-
-# List of directories to process
-set DIR $HOME/gm
-# disable noisy errors that X display cannot be opened
-set -x DISPLAY :0 
-# don't commit in these internal dirs
+# don't commit in these internal dirs. 
 set COMMIT_WHITELIST empty
 
-# this can be run in config.fish, uncomment if ever ssh failure issues
-# function ssh-ensure
-#   # start an ssh agent. Avoid change to this section. Debugging ssh key permissions is annoying.
-#   # output keychain ssh-agent shell info into this script and source it
-#   eval (keychain --eval -Q) # -Q is "quick" not quiet
-#   # This will not work! keychain --eval -Q
-# end
+# should be unnecessary, but ensures keychain is running. 
+function ssh-ensure ; eval (keychain --eval -Q) ; end
 
 # Assuming that tree is mirror-only, not used to work in:
 # On the way down: updating
@@ -55,17 +43,17 @@ function recurse-to-bottom -d "Recursively update git submodules"
     set -l thisdir (tk-path-to-name (pwd))
     if test -n "$is_changes" 
       if not contains $thisdir $COMMIT_WHITELIST
-        update -m # do commit in internal nodes
-      else 
+        update -m 
+      else # no commit in COMMIT_WHITELIST dirs
         echo "$thisdir is in commit whitelist, no commits"
         update 
       end
     else
       echo "no changes detected in $(pwd)."
     end
-  else ### LEAF NODE
-    # Don't commit in the leaves.
-    update 
+  else ### LEAF NODE - noop
+    echo "visited leaf node: $dir"
+    # update 
   end
 
   popd
@@ -105,8 +93,10 @@ function update -d "Update git submodule"
 end
 
 if test -d $HOME/gm
+  fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
+  set -x DISPLAY :0 # disable noisy errors that X display cannot be opened
   source $HOME/.files/fish/functions.fish # tk-path-to-name function
-  # ssh-ensure                 &>> $LOGFILE
+  ssh-ensure                 &>> $LOGFILE
   recurse-to-bottom $HOME/gm &>> $LOGFILE
 else
   echo "gm not found"        &>> $LOGFILE
