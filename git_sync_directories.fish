@@ -3,7 +3,6 @@
 # Set this up in cron to run every 10 minutes
 
 set LOGFILE $HOME/.cron/logs/git_sync_directories.log
-fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
 set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
 
 # List of directories to process
@@ -13,43 +12,26 @@ set DIRS $DIRS $HOME/.files
 set DIRS_NOCOMMIT $HOME/projects 
 
 # this can be run in config.fish, uncomment if ever ssh failure issues
-# function ssh-ensure
-#   # start an ssh agent. Avoid change to this section. Debugging ssh key permissions is annoying.
-#   # output keychain ssh-agent shell info into this script and source it
-#   eval (keychain --eval -Q) # -Q is "quick" not quiet
-#   # This will not work! keychain --eval -Q
-#   # make sure the cron key is added
-#   keychain --nogui ~/.ssh/id_ed25519 -Q
-#   # this should output some keys. If not, we're borked.
-#   echo known ssh keys: (keychain -L) 
-# end
+function ssh-ensure; eval (keychain --eval -Q); end
+#   keychain --nogui ~/.ssh/id_ed25519 -Q # maybe the same thing, not sure
+#   echo known ssh keys: (keychain -L)  # this should output some keys. If not, we're borked.
 
 function update-dirs
-  set dirs $argv[1..-2]
-  set nocommit $argv[-1]
-  # disable noisy errors that X display cannot be opened
-  set -x DISPLAY :0 
-
-  echo ============================ 
-  echo -e "cronlog: $COMMIT_MSG"    
-  echo "updating $dirs..."          
-  echo ============================ 
-
+  argparse 'c/commit' -- $argv
+  set dirs $argv
   # Loop through each directory and perform operations
-  for dir in $dirs ; update-dir $dir $nocommit ; end 
-
-  echo -e "Finished syncing" 
-  echo "===================================" 
+  for dir in $dirs ; update-dir $dir $_flag_c ; end 
 end
 
 function update-dir 
+  argparse 'c/commit' -- $argv
   set dir $argv[1] 
-  set nocommit $argv[2]
+
   cd $dir 
   echo "--------------------------------"
   echo -e "visiting $dir" 
 
-  if test -f .gitmodules; update-submodules $dir $nocommit ; end
+  if test -f .gitmodules; update-submodules $dir $_flag_c ; end
 
   echo "updating $dir" 
   if test $nocommit -eq 1  
@@ -75,26 +57,39 @@ function update-submodules
       echo \"visiting $dir\" 
       echo \"nocommit\"
       git pull && git push 
-      git checkout main
       git pull && git push 
       echo \"--------------------------------\"
-    "
+    " # git checkout main - don't do
   else
     git submodule foreach "
       echo \"visiting $dir\" 
       git pull && git push 
-      git checkout main
       git add . 
       git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
       git pull && git push 
       echo \"--------------------------------\"
-    "
+    " # git checkout main
   end
 
   echo "updated $dir submodules" 
   echo "********************************"
 end
 
-# ssh-ensure                   &>> $LOGFILE
-update-dirs $DIRS          0 &>> $LOGFILE
-update-dirs $DIRS_NOCOMMIT 1 &>> $LOGFILE
+if set -q DIRS 
+  # disable noisy errors that X display cannot be opened
+  set -x DISPLAY :0 
+  fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
+
+  echo ============================ 
+  echo -e "cronlog: $COMMIT_MSG"    
+  echo "updating $dirs..."          
+  echo ============================ 
+
+  ssh-ensure                   
+
+  update-dirs $DIRS -c
+  echo -e "Finished syncing commit dirs" 
+  echo "===================================" 
+  echo -e "Finished syncing commit dirs" 
+  update-dirs $DIRS_NOCOMMIT 1
+end &>> $LOGFILE

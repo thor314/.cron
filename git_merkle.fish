@@ -5,7 +5,7 @@
 
 set LOGFILE $HOME/.cron/logs/git_merkle.log
 set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
-# don't commit in these internal dirs. 
+# don't commit in these internal dirs. Must use fully qualified name, i.e. $HOME/.files
 set COMMIT_WHITELIST empty
 
 # should be unnecessary, but ensures keychain is running. 
@@ -40,9 +40,8 @@ function recurse-to-bottom -d "Recursively update git submodules"
 
     # On the way up: committing
     set -l is_changes (git status --porcelain)
-    set -l thisdir (tk-path-to-name (pwd))
     if test -n "$is_changes" 
-      if not contains $thisdir $COMMIT_WHITELIST
+      if not contains (pwd) $COMMIT_WHITELIST
         update -m 
       else # no commit in COMMIT_WHITELIST dirs
         echo "$thisdir is in commit whitelist, no commits"
@@ -75,7 +74,6 @@ end
 if test -d $HOME/gm
   fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
   set -x DISPLAY :0 # disable noisy errors that X display cannot be opened
-  source $HOME/.files/fish/functions.fish # tk-path-to-name function
   ssh-ensure                 
   recurse-to-bottom $HOME/gm 
 else
