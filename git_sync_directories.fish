@@ -5,10 +5,10 @@
 set LOGFILE $HOME/.cron/logs/git_sync_directories.log
 set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
 
-# List of directories to process
+# List of directories to sync. Assume these all use ONLY the main branch.
 set DIRS $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep 
 set DIRS $DIRS $HOME/.files 
-# do not create noisy sync commits in projects, do this manually
+# do not create noisy sync commits in work dirs
 set DIRS_NOCOMMIT $HOME/projects $HOME/cryptography
 
 # this can be run in config.fish, uncomment if ever ssh failure issues
@@ -27,23 +27,25 @@ function update-dir
   argparse 'c/commit' -- $argv
   set dir $argv[1] 
 
-  pushd $dir && echo "--------------------------------"
-  echo -e "$dir: visiting" 
+  if test -d $dir 
+    pushd $dir && echo "--------------------------------"
+    echo -e "$dir: visiting" 
 
-  if test -f .gitmodules; update-submodules $dir $_flag_c ; end
+    if test -f .gitmodules; update-submodules $dir $_flag_c ; end
 
-  if not set -q _flag_c
-    echo "$dir: nocommit"
-    git push && git pull 
-  else
-    if test (git status --porcelain) 
-      echo "$dir: commit"
-      git add --all && git commit -m \"$COMMIT_MSG\" 
+    if not set -q _flag_c
+      echo "$dir: nocommit"
       git push && git pull 
+    else
+      if test (git status --porcelain) 
+        echo "$dir: commit"
+        git add --all && git commit -m \"$COMMIT_MSG\" 
+        git push && git pull 
+      end
     end
-  end
 
-  echo "--------------------------------" && popd
+    echo "--------------------------------" && popd
+  end
 end
 
 function update-submodules
