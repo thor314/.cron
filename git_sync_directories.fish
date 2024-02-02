@@ -62,6 +62,9 @@ function update-submodules
 
   if not set -q _flag_c
     git submodule foreach "
+      if not git symbolic-ref -q HEAD >> /dev/null # detached HEAD state, checkout main
+        git checkout main
+      end
       echo \"$dir: visiting submodule, nocommit\" 
       git push && git pull
     " 
@@ -79,8 +82,8 @@ function update-submodules
 end
 
 if set -q DIRS 
-  set -x DISPLAY :0 # disable noisy errors that X display cannot be opened
   fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
+  set -x DISPLAY :0 # disable noisy errors that X display cannot be opened
 
   echo ============================ 
   echo -e "cronlog: $COMMIT_MSG"    
@@ -93,5 +96,5 @@ if set -q DIRS
   echo -e "Finished syncing commit dirs" 
   echo "===================================" 
   echo -e "Finished syncing commit dirs" 
-  update-dirs $DIRS_NOCOMMIT 1
+  update-dirs $DIRS_NOCOMMIT 
 end &>> $LOGFILE
