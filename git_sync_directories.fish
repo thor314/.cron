@@ -35,10 +35,12 @@ function update-dir
 
     if not set -q _flag_c
       echo "$dir: nocommit"
+      git symbolic-ref -q HEAD >> /dev/null || git checkout main
       git push && git pull 
     else
-      if test (git status --porcelain) 
+      if test -z "$(git status --porcelain)"
         echo "$dir: commit"
+        git symbolic-ref -q HEAD >> /dev/null || git checkout main
         git add --all && git commit -m \"$COMMIT_MSG\" 
         git push && git pull 
       end
@@ -64,13 +66,14 @@ function update-submodules
 
   if not set -q _flag_c
     git submodule foreach "
-      git checkout main
       echo \"$dir: visiting submodule, nocommit\" 
+      git symbolic-ref -q HEAD >> /dev/null || git checkout main
       git push && git pull
     " 
   else
     git submodule foreach "
       echo \"$dir: visiting submodule, commit\" 
+      git symbolic-ref -q HEAD >> /dev/null || git checkout main
       git add --all . && git commit -m \"$COMMIT_MSG\"
       git push && git pull
       echo \"--------------------------------\"
@@ -84,17 +87,15 @@ end
 if set -q DIRS 
   fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
   set -x DISPLAY :0 # disable noisy errors that X display cannot be opened
+  source $HOME/.files/fish/functions.fish && tk-keychain 
 
   echo ============================ 
   echo -e "cronlog: $COMMIT_MSG"    
   echo "updating $dirs..."          
   echo ============================ 
 
-  ssh-ensure                   
-
   update-dirs $DIRS -c
   echo -e "Finished syncing commit dirs" 
   echo "===================================" 
-  echo -e "Finished syncing commit dirs" 
   update-dirs $DIRS_NOCOMMIT 
 end &>> $LOGFILE

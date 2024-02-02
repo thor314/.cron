@@ -14,7 +14,7 @@ function sync
   echo -e "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   echo -e "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
-  fish $HOME/.files/scripts/sync.fish 
+  fish $HOME/.cron/help_scripts/sync.fish 
 end 
 
 sync &>> $LOGFILE

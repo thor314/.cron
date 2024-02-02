@@ -8,9 +8,6 @@ set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
 # don't commit in these internal dirs. Must use fully qualified name, i.e. $HOME/.files
 set COMMIT_WHITELIST empty
 
-# should be unnecessary, but ensures keychain is running. 
-function ssh-ensure ; eval (keychain --eval -Q) ; end
-
 # Assuming that tree is mirror-only, not used to work in:
 # On the way down: updating
 ## INTERNAL NODE: switch from commit hash to main. All internal nodes have only the main branch.
@@ -63,18 +60,18 @@ function update -d "Commits changes. Assumes that there are changes to commit. O
   if set -q _flag_m
     # we're in an internal node, and committing changes.
     echo "Committing changes in $(pwd)..."
-    git add . && git commit -m $COMMIT_MSG && git push
-    return 0
+    git add . && git commit -m $COMMIT_MSG 
+    git push && git pull
   else # No commit
     echo "Visited, but not committing in $(pwd)..."
-    return 0
+    git push && git pull
   end
 end
 
 if test -d $HOME/gm
   fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
   set -x DISPLAY :0 # disable noisy errors that X display cannot be opened
-  ssh-ensure                 
+  source $HOME/.files/functions.fish && tk-keychain 
   recurse-to-bottom $HOME/gm 
 else
   echo "gm not found"       
