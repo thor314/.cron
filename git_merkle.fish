@@ -4,7 +4,6 @@
 # Set this up in cron to run every 10 minutes
 
 set LOGFILE $HOME/.cron/logs/git_merkle.log
-set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
 # don't commit in these internal dirs. Must use fully qualified name, i.e. $HOME/.files
 set COMMIT_WHITELIST empty
 
@@ -69,9 +68,7 @@ function update -d "Commits changes. Assumes that there are changes to commit. O
 end
 
 if test -d $HOME/gm
-  fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
-  set -x DISPLAY :0 # disable noisy errors that X display cannot be opened
-  source $HOME/.files/functions.fish && tk-keychain 
+  fish ~/.cron/help_scripts/cron_init.fish $LOGFILE
   recurse-to-bottom $HOME/gm 
 else
   echo "gm not found"       

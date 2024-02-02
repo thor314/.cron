@@ -2,15 +2,12 @@
 # copy and publish files to my blog and maybe other places
 
 set LOGFILE $HOME/.cron/logs/run_tk_blog_publish.log
-set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
 # don't commit in these internal dirs. Must use fully qualified name, i.e. $HOME/.files
 set BIN_DIR /home/thor/projects/tk-blog-publish
 set PATH $PATH /home/thor/.cargo/bin # ensure that we can use cargo
 
 if test -d $BIN_DIR
-  fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
-  set -x DISPLAY :0 # disable noisy errors that X display cannot be opened
-  echo CRONLOG: $COMMIT_MSG
+  fish ~/.cron/help_scripts/cron_init.fish $LOGFILE
 
   cd $BIN_DIR
   # build, move, run binary

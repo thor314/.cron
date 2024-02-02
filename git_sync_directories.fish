@@ -3,18 +3,12 @@
 # Set this up in cron to run every 10 minutes
 
 set LOGFILE $HOME/.cron/logs/git_sync_directories.log
-set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
 
 # List of directories to sync. Assume these all use ONLY the main branch.
 set DIRS $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep 
 set DIRS $DIRS $HOME/.files 
 # do not create noisy sync commits in work dirs
 set DIRS_NOCOMMIT $HOME/projects $HOME/cryptography
-
-# this can be run in config.fish, uncomment if ever ssh failure issues
-function ssh-ensure; eval (keychain --eval -Q); end
-#   keychain --nogui ~/.ssh/id_ed25519 -Q # maybe the same thing, not sure
-#   echo known ssh keys: (keychain -L)  # this should output some keys. If not, we're borked.
 
 function update-dirs
   argparse 'c/commit' -- $argv
@@ -85,17 +79,9 @@ function update-submodules
 end
 
 if set -q DIRS 
-  fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
-  set -x DISPLAY :0 # disable noisy errors that X display cannot be opened
-  source $HOME/.files/fish/functions.fish && tk-keychain 
-
-  echo ============================ 
-  echo -e "cronlog: $COMMIT_MSG"    
-  echo "updating $dirs..."          
-  echo ============================ 
+  fish ~/.cron/help_scripts/cron_init.fish $LOGFILE
 
   update-dirs $DIRS -c
-  echo -e "Finished syncing commit dirs" 
-  echo "===================================" 
+  echo -e "\nFinished syncing commit dirs\n" 
   update-dirs $DIRS_NOCOMMIT 
 end &>> $LOGFILE
