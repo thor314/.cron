@@ -20,7 +20,7 @@ function ssh-ensure ; eval (keychain --eval -Q) ; end
 ## LEAF NODE: We do not work in the leaf nodes, so we should not have to do anything there. 
 # On the way up: committing
 ## INTERNAL NODE: We should now be confident that all internal nodes are updated. 
-## `git commit -m $COMMIT_MSG` && git push
+## `git add --all . && git commit -m $COMMIT_MSG` && git push
 function recurse-to-bottom -d "Recursively update git submodules"
   set dir $argv[1]
   pushd $dir
@@ -31,7 +31,7 @@ function recurse-to-bottom -d "Recursively update git submodules"
     set -l modules (git config --file .gitmodules --get-regexp path | awk '{ print $2 }')
     for m in $modules
       if test -d $m 
-        echo "from $(pwd), entering submodule: $m"
+        echo "from $dir, entering submodule: $m"
         recurse-to-bottom $m
       else # submodule has been removed incorrectly: removed directory but not .gitmodules entry
         echo -e "\n**WARNING**: thor sloppy, many such cases. $m must be removed from .gitmodules manually.\n"
@@ -46,59 +46,39 @@ function recurse-to-bottom -d "Recursively update git submodules"
         update -m 
       else # no commit in COMMIT_WHITELIST dirs
         echo "$thisdir is in commit whitelist, no commits"
-        update 
+        update # noop
       end
     else
       echo "no changes detected in $(pwd)."
     end
-  else ### LEAF NODE - noop
-    echo "visited leaf node: $dir"
-    # update 
+  else ### LEAF NODE 
+    update # noop
   end
 
   popd
 end
 
-function update -d "Update git submodule"
-  # checkout the main branch (sometimes submodules switch to commit hash rather than main)
-  # then pull if there are upstream changes. 
-  # assume that there are changes in this repo.
-  # commit if there changes here and we are instructed to do so
-  # otherwise we are in a leaf, and just leave it at pulling.
-  echo updating from (pwd)
+function update -d "Commits changes. Assumes that there are changes to commit. Option to not commit, just log."
   argparse 'm/modify' -- $argv
-  or return 1
-
-  git checkout (__git.default_branch) # stay on the main branch
-
-  set -l remote_branch (git rev-parse --abbrev-ref --symbolic-full-name @{u})
-  set -l upstream_changes (git diff --quiet HEAD $remote_branch; and echo 0; or echo 1)
-  if test $upstream_changes -eq 1
-    git pull
-  end
 
   if set -q _flag_m
     # we're in an internal node, and committing changes.
     echo "Committing changes in $(pwd)..."
-    git add .
-    git commit -m $COMMIT_MSG
-    git push
+    git add . && git commit -m $COMMIT_MSG && git push
     return 0
-  else
-    echo "pulling from leaf dir $(pwd)"
+  else # No commit
+    echo "Visited, but not committing in $(pwd)..."
     return 0
   end
-
-  echo "no changes in $(pwd)"
 end
 
 if test -d $HOME/gm
   fish ~/.cron/help_scripts/rotate_logs.sh $LOGFILE
   set -x DISPLAY :0 # disable noisy errors that X display cannot be opened
   source $HOME/.files/fish/functions.fish # tk-path-to-name function
-  ssh-ensure                 &>> $LOGFILE
-  recurse-to-bottom $HOME/gm &>> $LOGFILE
+  ssh-ensure                 
+  recurse-to-bottom $HOME/gm 
 else
-  echo "gm not found"        &>> $LOGFILE
-end
+  echo "gm not found"       
+end &>> $LOGFILE
 
