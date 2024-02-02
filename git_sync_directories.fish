@@ -9,7 +9,7 @@ set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
 set DIRS $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep 
 set DIRS $DIRS $HOME/.files 
 # do not create noisy sync commits in projects, do this manually
-set DIRS_NOCOMMIT $HOME/projects 
+set DIRS_NOCOMMIT $HOME/projects $HOME/cryptography
 
 # this can be run in config.fish, uncomment if ever ssh failure issues
 function ssh-ensure; eval (keychain --eval -Q); end
@@ -62,9 +62,7 @@ function update-submodules
 
   if not set -q _flag_c
     git submodule foreach "
-      if not git symbolic-ref -q HEAD >> /dev/null # detached HEAD state, checkout main
-        git checkout main
-      end
+      git checkout main
       echo \"$dir: visiting submodule, nocommit\" 
       git push && git pull
     " 
