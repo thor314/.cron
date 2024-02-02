@@ -27,48 +27,52 @@ function update-dir
   argparse 'c/commit' -- $argv
   set dir $argv[1] 
 
-  cd $dir 
-  echo "--------------------------------"
-  echo -e "visiting $dir" 
+  pushd $dir && echo "--------------------------------"
+  echo -e "$dir: visiting" 
 
   if test -f .gitmodules; update-submodules $dir $_flag_c ; end
 
-  echo "updating $dir" 
-  if test $nocommit -eq 1  
-    echo "nocommit"
+  if not set -q _flag_c
+    echo "$dir: nocommit"
+    git push && git pull 
   else
-    git add --all 
-    git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
+    if test (git status --porcelain) 
+      echo "$dir: commit"
+      git add --all && git commit -m \"$COMMIT_MSG\" 
+      git push && git pull 
+    end
   end
-  git pull && git push 
-  echo "leaving $dir " 
 
-  echo "--------------------------------"
+  echo "--------------------------------" && popd
 end
 
 function update-submodules
+  argparse 'c/commit' -- $argv
   set dir $argv[1]
-  set nocommit $argv[2]
+
   echo "********************************"
   echo "updating $dir submodules" 
-  # need the git diff line, or submodule will exit early
-  if test $nocommit -eq 1  
+  git pull 
+  git submodule update --init
+
+  if not git symbolic-ref -q HEAD >> /dev/null # detached HEAD state, checkout main
+    git checkout main
+  # else ; set branch_name (git symbolic-ref --short HEAD)
+  end
+
+  if not set -q _flag_c
     git submodule foreach "
-      echo \"visiting $dir\" 
-      echo \"nocommit\"
-      git pull && git push 
-      git pull && git push 
-      echo \"--------------------------------\"
-    " # git checkout main - don't do
+      echo \"$dir: visiting submodule, nocommit\" 
+      git push && git pull
+    " 
   else
     git submodule foreach "
-      echo \"visiting $dir\" 
-      git pull && git push 
+      echo \"$dir: visiting submodule, commit\" 
       git add . 
-      git diff --cached --exit-code --quiet || git commit -m \"$COMMIT_MSG\"
-      git pull && git push 
+      git commit -m \"$COMMIT_MSG\"
+      git push && git pull
       echo \"--------------------------------\"
-    " # git checkout main
+    " 
   end
 
   echo "updated $dir submodules" 
