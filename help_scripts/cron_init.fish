@@ -8,7 +8,8 @@ else; echo "no log file provided"; end
 # disable noisy errors that X display cannot be opened
 set -x DISPLAY :0 
 # ensure keychain is running
-source $HOME/.files/fish/functions.fish && tk-keychain
+source $HOME/.files/fish/functions.fish 
+tk-keychain ~/.ssh/id_ed25519
 # write a pretty log message
 set -gx COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
 echo ============================
