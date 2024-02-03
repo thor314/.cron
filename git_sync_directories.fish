@@ -51,10 +51,14 @@ function update-submodules
   set dir $argv[1]
 
   echo "********************************"
-  echo "updating $dir submodules" 
+  echo "$dir: updating" 
   git pull 
   git submodule update --init
+  git symbolic-ref -q HEAD >> /dev/null || git checkout main
+  git add --all . && git commit -m \"$COMMIT_MSG\"
+  git push && git pull
 
+  echo "updating $dir submodules" 
   if not set -q _flag_c
     git submodule foreach "
       echo \"$dir: visiting submodule, nocommit\" 
