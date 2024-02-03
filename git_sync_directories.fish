@@ -8,7 +8,7 @@ set LOGFILE $HOME/.cron/logs/git_sync_directories.log
 set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
 set DIRS $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep 
 set DIRS $DIRS $HOME/.files 
-# do not create noisy sync commits in work dirs
+# do not create noisy sync commits in work dirs, just the root dir
 set DIRS_NOCOMMIT $HOME/projects $HOME/cryptography
 
 function update-dirs
