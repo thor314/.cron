@@ -5,6 +5,7 @@
 set LOGFILE $HOME/.cron/logs/git_sync_directories.log
 
 # List of directories to sync. Assume these all use ONLY the main branch.
+set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
 set DIRS $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep 
 set DIRS $DIRS $HOME/.files 
 # do not create noisy sync commits in work dirs
@@ -29,13 +30,15 @@ function update-dir
     if test -f .gitmodules; update-submodules $dir $_flag_c ; end
 
     if not set -q _flag_c
-      echo "$dir: nocommit"
+      echo "$dir: no commit"
       git push && git pull 
     else
-      if test -z "$(git status --porcelain)"
-        echo "$dir: commit"
+      if not test -z "$(git status --porcelain)"
+        echo "$dir: with commit"
         git add --all && git commit -m \"$COMMIT_MSG\" 
         git push && git pull 
+      else 
+        echo "$dir: no changes"
       end
     end
 

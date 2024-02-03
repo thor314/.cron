@@ -6,6 +6,7 @@
 set LOGFILE $HOME/.cron/logs/git_merkle.log
 # don't commit in these internal dirs. Must use fully qualified name, i.e. $HOME/.files
 set COMMIT_WHITELIST empty
+set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
 
 # Assuming that tree is mirror-only, not used to work in:
 # On the way down: updating
