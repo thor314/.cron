@@ -6,10 +6,9 @@ set LOGFILE $HOME/.cron/logs/git_sync_directories.log
 
 # List of directories to sync. Assume these all use ONLY the main branch.
 set COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
-set DIRS $HOME/.setup $HOME/.cron $HOME/.private $HOME/.keep 
-set DIRS $DIRS $HOME/.files 
+set DIRS $HOME/{.setup, .cron, .private, .keep, .files}
 # do not create noisy sync commits in work dirs, just the root dir
-set DIRS_NOCOMMIT $HOME/projects $HOME/cryptography
+set DIRS_NOCOMMIT $HOME/{projects, cryptography}
 
 function update-dirs
   argparse 'c/commit' -- $argv
