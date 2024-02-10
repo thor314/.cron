@@ -1,7 +1,7 @@
 #!/usr/bin/env fish
 # rustup update
 
-set LOGFILE ~/.cron/logs/rustup-update.log
+set LOGFILE ~/.cron/logs/rustup_update.log
 
 function tk-rustup-update
   fish ~/.cron/help_scripts/cron_init.fish $LOGFILE
