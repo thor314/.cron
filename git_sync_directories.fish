@@ -23,21 +23,21 @@ function update-dir
 
   if test -d $dir 
     pushd $dir && echo "--------------------------------"
-    echo -e "$dir: visiting" 
+    echo -e "INFO: $dir: visiting" 
 
     git symbolic-ref -q HEAD >> /dev/null || git checkout main
     if test -f .gitmodules; update-submodules $dir $_flag_c ; end
 
     if not set -q _flag_c
-      echo "$dir: no commit"
+      echo "INFO: $dir: no commit"
       git push && git pull 
     else
       if not test -z "$(git status --porcelain)"
-        echo "$dir: with commit"
+        echo "INFO: $dir: with commit"
         git add --all && git commit -m \"$COMMIT_MSG\" 
         git push && git pull 
       else 
-        echo "$dir: no changes"
+        echo "INFO: $dir: no changes"
       end
     end
 
@@ -50,23 +50,23 @@ function update-submodules
   set dir $argv[1]
 
   echo "********************************"
-  echo "$dir: updating" 
+  echo "INFO: $dir: updating" 
   git pull 
   git submodule update --init
   git symbolic-ref -q HEAD >> /dev/null || git checkout main
   git add --all . && git commit -m \"$COMMIT_MSG\"
   git push && git pull
 
-  echo "updating $dir submodules" 
+  echo "INFO: updating $dir submodules" 
   if not set -q _flag_c
     git submodule foreach "
-      echo \"$dir: visiting submodule, nocommit\" 
+      echo \"INFO: $dir: visiting submodule, nocommit\" 
       git symbolic-ref -q HEAD >> /dev/null || git checkout main
       git push && git pull
     " 
   else
     git submodule foreach "
-      echo \"$dir: visiting submodule, commit\" 
+      echo \"INFO: $dir: visiting submodule, commit\" 
       git symbolic-ref -q HEAD >> /dev/null || git checkout main
       git add --all . && git commit -m \"$COMMIT_MSG\"
       git push && git pull
@@ -74,7 +74,7 @@ function update-submodules
     " 
   end
 
-  echo "updated $dir submodules" 
+  echo "INFO: updated $dir submodules" 
   echo "********************************"
 end
 
@@ -82,6 +82,6 @@ if set -q DIRS
   fish ~/.cron/help_scripts/cron_init.fish $LOGFILE
 
   update-dirs $DIRS -c
-  echo -e "\nFinished syncing commit dirs\n" 
+  echo -e "INFO: \nFinished syncing commit dirs\n" 
   update-dirs $DIRS_NOCOMMIT 
 end &>> $LOGFILE

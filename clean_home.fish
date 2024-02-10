@@ -10,13 +10,13 @@ function clean_home
 
   for f in $FILES
       if test -f $f
-          echo "Removing file: $f" 
+          echo "INFO: Removing file: $f" 
           rm $f
       end
   end
   for d in $DIRS
       if test -d $d
-          echo "Removing dir: $d" 
+          echo "INFO: Removing dir: $d" 
           rm $d -r
       end
   end

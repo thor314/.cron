@@ -28,10 +28,10 @@ function recurse-to-bottom -d "Recursively update git submodules"
     set -l modules (git config --file .gitmodules --get-regexp path | awk '{ print $2 }')
     for m in $modules
       if test -d $m 
-        echo "from $dir, entering submodule: $m"
+        echo "INFO: from $dir, entering submodule: $m"
         recurse-to-bottom $m
       else # submodule has been removed incorrectly: removed directory but not .gitmodules entry
-        echo -e "\n**WARNING**: thor sloppy, many such cases. $m must be removed from .gitmodules manually.\n"
+        echo -e "WARNING: thor sloppy, many such cases. $m must be removed from .gitmodules manually."
       end
     end
 
@@ -41,16 +41,15 @@ function recurse-to-bottom -d "Recursively update git submodules"
       if not contains (pwd) $COMMIT_WHITELIST
         update -m 
       else # no commit in COMMIT_WHITELIST dirs
-        echo "$thisdir is in commit whitelist, no commits"
+        echo "INFO: $thisdir is in commit whitelist, no commits"
         update # noop
       end
     else
-      echo "no changes detected in $(pwd)."
+      echo "INFO: no changes detected in $(pwd)."
     end
   else ### LEAF NODE 
     update # noop
   end
-
   popd
 end
 
@@ -59,11 +58,11 @@ function update -d "Commits changes. Assumes that there are changes to commit. O
 
   if set -q _flag_m
     # we're in an internal node, and committing changes.
-    echo "Committing changes in $(pwd)..."
+    echo "INFO: Committing changes in $(pwd)..."
     git add . && git commit -m $COMMIT_MSG 
     git push && git pull
   else # No commit
-    echo "Visited, but not committing in $(pwd)..."
+    echo "INFO: Visited, but not committing in $(pwd)..."
     git push && git pull
   end
 end
@@ -72,6 +71,6 @@ if test -d $HOME/gm
   fish ~/.cron/help_scripts/cron_init.fish $LOGFILE
   recurse-to-bottom $HOME/gm 
 else
-  echo "gm not found"       
+  echo "ERROR: gm not found"       
 end &>> $LOGFILE
 
