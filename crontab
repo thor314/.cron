@@ -8,7 +8,7 @@
 0 0 * * * /usr/bin/fish /home/thor/.cron/run_tk_blog_publish.fish 
 0 0 * * * /usr/bin/date -u && /usr/bin/python3 /home/thor/projects/github_name/main.py --backdate=1 >> /home/thor/.cron/logs/github_name.log 2>&1
 0 0 * * * /usr/bin/date -u && /usr/bin/flatpak update --user -y >> /home/thor/.cron/logs/flatpak.log 2>&1
-0 0 * * * /usr/bin/date -u && /home/thor/.cargo/bin/rustup update >> /home/thor/.cron/logs/rustup.log 2>&1
+0 0 * * * /usr/bin/fish /home/thor/.cron/rustup-update.fish
 
 # sudo crontab:
 # every day
