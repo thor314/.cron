@@ -9,7 +9,7 @@ else; echo "ERROR: no log file provided" && exit 1 ; end
 set -gx DISPLAY :0 
 # ensure keychain is running
 source $HOME/.files/fish/functions.fish 
-tk-keychain ~/.ssh/id_ed25519
+tk-keychain ~/.ssh/id_ed25519 || echo "ERROR: failed to set up keychain" && exit 1
 # write a pretty log message
 set -gx COMMIT_MSG $(hostname)-$(date -u +%Y-%m-%d-%H:%M%Z)
 echo ============================
