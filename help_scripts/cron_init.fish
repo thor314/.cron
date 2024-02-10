@@ -6,7 +6,7 @@ if not test -z $LOGFILE
   fish ~/.cron/help_scripts/rotate_logs.fish $LOGFILE
 else; echo "ERROR: no log file provided"; end
 # disable noisy errors that X display cannot be opened
-set -x DISPLAY :0 
+set -gx DISPLAY :0 
 # ensure keychain is running
 source $HOME/.files/fish/functions.fish 
 tk-keychain ~/.ssh/id_ed25519
