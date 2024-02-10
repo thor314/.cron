@@ -1,14 +1,12 @@
 #!/usr/bin/env fish
-# apt update. must be run with sudo.
+# update my name commits on github
 
-set LOGFILE ~/.cron/logs/flatpak_update.log
+set LOGFILE ~/.cron/logs/github_name.log
 
-function tk-apt-update
+function tk-github-name
   fish ~/.cron/help_scripts/cron_init.fish $LOGFILE
-  /usr/bin/flatpak update --user -y 
-
+  /usr/bin/python3 /home/thor/projects/github_name/main.py --backdate=1 
 end
 
-tk-apt-update &>> $LOGFILE
-
+tk-github-name &>> $LOGFILE
 
