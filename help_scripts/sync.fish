@@ -1,7 +1,7 @@
 #!/usr/bin/fish
 # argument to run on my other machines to keep them in sync
 
-if not test -f ~/.cargo/bin/taplo
+if not type -q taplo
   # https://taplo.tamasfe.dev/cli/introduction.html
   echo "INFO: installing taplo"
   wget https://github.com/tamasfe/taplo/releases/latest/download/taplo-linux-x86.gz
@@ -17,32 +17,35 @@ if not type -q gi
   gi update-completions
 end
 
-if test -L ~/.config/Code/User/settings.json
-  echo "INFO: unlink vscode symlinks, which are i have merge conflicts with now every day"
-  set CODE ~/.config/Code/User
-  cp ~/.private/vscode $CODE
-  rm -rf $CODE/{settings.json, keybindings.json, snippets}
-  cp $CODE/vscode/* $CODE
-end
+# if test -L ~/.config/Code/User/settings.json
+#   echo "INFO: unlink vscode symlinks, which are i have merge conflicts with now every day"
+#   set CODE ~/.config/Code/User
+#   cp ~/.private/vscode $CODE
+#   rm -rf $CODE/{settings.json, keybindings.json, snippets}
+#   cp $CODE/vscode/* $CODE
+# end
 
 if not test -f ~/.cargo/bin/cargo-binstall
   cargo binstall cargo-binstall # fast binary installer, don't build from source
 end
 
-if not contains prettier $PATH
-  nvm use latest
+command -s node -q || nvm use latest
+
+if not command -s prettier -q
+  # nvm use latest
   npm install -g prettier
 end
   
-if not command hackmd-cli $PATH
-  nvm use latest
+if not command -s hackmd-cli -q
+  # nvm use latest
   npm install -g hackmd-cli
 end
 
-if not command tsc # a gizmo to give me linux cli instructions from the command line
-  nvm use latest
+if not command -s tsc -q # a gizmo to give me linux cli instructions from the command line
+  # nvm use latest
   npm install -g typescript
 end 
+
 if not test -d ~/fun/cmdh
   curl https://ollama.ai/install.sh | sh
   hub clone https://github.com/pgibler/cmdh ~/fun/cmdh && cd cmdh

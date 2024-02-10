@@ -11,13 +11,13 @@ function clean_home
   for f in $FILES
       if test -f $f
           echo "INFO: Removing file: $f" 
-          rm $f
+          rm $f || echo "WARNING: could not remove $f"
       end
   end
   for d in $DIRS
       if test -d $d
           echo "INFO: Removing dir: $d" 
-          rm $d -r
+          rm $d -r || echo "WARNING: could not remove $d"
       end
   end
 end
