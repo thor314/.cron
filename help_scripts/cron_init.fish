@@ -4,7 +4,10 @@ set LOGFILE $argv[1]
 # rotate the logs
 if test -f $LOGFILE 
   fish ~/.cron/help_scripts/rotate_logs.fish $LOGFILE
-else; echo "ERROR: no log file provided or does not exist" && exit 1 ; end
+else
+  echo "WARNING: creating new logfile" >> $LOGFILE 
+  exit 1 
+end
 # disable noisy errors that X display cannot be opened
 function init
   set -gx DISPLAY :0 
