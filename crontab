@@ -12,6 +12,5 @@
 
 # sudo crontab:
 # every day
-# apt-get not apt. apt will warn about non-stable cli interface.
-0 0 * * * /usr/bin/date -u && DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y upgrade >> /home/thor/.cron/logs/apt.log 2>&1
+0 0 * * * /usr/bin/fish /home/thor/.cron/apt.fish
 
