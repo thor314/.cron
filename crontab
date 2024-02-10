@@ -12,5 +12,6 @@
 
 # sudo crontab:
 # every day
-0 0 * * * DEBIAN_FRONTEND=noninteractive apt update && apt -y upgrade >> /home/thor/.cron/logs/apt.log 2>&1
+# apt-get not apt. apt will warn about non-stable cli interface.
+0 0 * * * DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y upgrade >> /home/thor/.cron/logs/apt.log 2>&1
 
