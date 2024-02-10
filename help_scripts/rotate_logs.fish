@@ -17,6 +17,6 @@ end
 if test -f $LOGFILE 
   mv $LOGFILE "$LOGFILE.1"
 else 
-  echo "no such logfile: $LOGFILE"
+  echo "ERROR: no such logfile: $LOGFILE"
 end
 

@@ -3,7 +3,7 @@
 
 if not test -f ~/.cargo/bin/taplo
   # https://taplo.tamasfe.dev/cli/introduction.html
-  echo "installing taplo"
+  echo "INFO: installing taplo"
   wget https://github.com/tamasfe/taplo/releases/latest/download/taplo-linux-x86.gz
   gunzip taplo-linux-x86.gz
   chmod +x taplo-linux-x86
@@ -12,13 +12,13 @@ end
 
 if not type -q gi
   # https://github.com/oh-my-fish/plugin-gi
-  echo "updating fish plugin gi"
+  echo "INFO: updating fish plugin gi"
   fisher install oh-my-fish/plugin-gi
   gi update-completions
 end
 
 if test -L ~/.config/Code/User/settings.json
-  echo "unlink vscode symlinks, which are i have merge conflicts with now every day"
+  echo "INFO: unlink vscode symlinks, which are i have merge conflicts with now every day"
   set CODE ~/.config/Code/User
   cp ~/.private/vscode $CODE
   rm -rf $CODE/{settings.json, keybindings.json, snippets}
@@ -34,14 +34,16 @@ if not contains prettier $PATH
   npm install -g prettier
 end
   
-if not contains hackmd-cli $PATH
+if not command hackmd-cli $PATH
   nvm use latest
   npm install -g hackmd-cli
 end
 
-if not contains tsc $PATH # a gizmo to give me linux cli instructions from the command line
+if not command tsc # a gizmo to give me linux cli instructions from the command line
   nvm use latest
   npm install -g typescript
+end 
+if not test -d ~/fun/cmdh
   curl https://ollama.ai/install.sh | sh
   hub clone https://github.com/pgibler/cmdh ~/fun/cmdh && cd cmdh
   ./install.sh
