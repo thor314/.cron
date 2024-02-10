@@ -6,7 +6,7 @@
 0 0 * * * /usr/bin/fish /home/thor/.cron/sync_updates.fish 
 0 0 * * * /usr/bin/fish /home/thor/.cron/git_merkle.fish 
 0 0 * * * /usr/bin/fish /home/thor/.cron/run_tk_blog_publish.fish 
-0 0 * * * /usr/bin/date -u && /usr/bin/python3 /home/thor/projects/github_name/main.py --backdate=1 >> /home/thor/.cron/logs/github_name.log 2>&1
+0 0 * * * /usr/bin/fish /home/thor/.cron/github_name.fish
 0 0 * * * /usr/bin/fish /home/thor/.cron/flatpak_update.fish
 0 0 * * * /usr/bin/fish /home/thor/.cron/rustup_update.fish
 
