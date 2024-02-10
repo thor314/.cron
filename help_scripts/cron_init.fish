@@ -2,9 +2,9 @@
 
 set LOGFILE $argv[1]
 # rotate the logs
-if not test -z $LOGFILE 
+if test -f $LOGFILE 
   fish ~/.cron/help_scripts/rotate_logs.fish $LOGFILE
-else; echo "ERROR: no log file provided"; end
+else; echo "ERROR: no log file provided" && exit 1 ; end
 # disable noisy errors that X display cannot be opened
 set -gx DISPLAY :0 
 # ensure keychain is running
