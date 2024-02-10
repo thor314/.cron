@@ -12,5 +12,5 @@
 
 # sudo crontab:
 # every day
-# 0 0 * * * DEBIAN_FRONTEND=noninteractive apt update && apt -y upgrade >> /home/thor/.cron/logs/apt.log 2>&1
+0 0 * * * DEBIAN_FRONTEND=noninteractive apt update && apt -y upgrade >> /home/thor/.cron/logs/apt.log 2>&1
 

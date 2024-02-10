@@ -4,13 +4,13 @@
 set LOGFILE $argv[1]
 
 if test -f $LOGFILE.9
-  rm $LOGFILE.9
+  rm $LOGFILE.9 || echo "WARNING: No such file $LOGFILE.9"
 end
 
 for i in (seq 8 -1 1)
-  if test -f $LOGFILE.i
+  if test -f $LOGFILE.$i
     set i_ (math "$i+1")
-    mv $LOGFILE.i $LOGFILE.i_
+    mv $LOGFILE.$i $LOGFILE.$i_ || echo "WARNING: No such file $LOGFILE.$i"
   end
 end
 
