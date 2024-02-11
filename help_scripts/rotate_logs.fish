@@ -5,28 +5,28 @@ set LOGFILE $argv[1]
 set ONE_MB 1048576 # bytes
 
 
-function rotate_logs
-  # if logfile.9 is overflowing, remove it
-  if test -f $LOGFILE.9 
-    set size (wc -c $LOGFILE.9 | string split " ")[1]
+function rotate_log_inspect
+  # If $LOGFILE is over 1mb in size, bump it back a number, and bump everything else back too
+  if test -f $LOGFILE
+    set size (wc -c $LOGFILE | string split " ")[1]
     if test size -ge $ONE_MB
-      echo "INFO: removing $LOGFILE.9"
-      rm $LOGFILE.9 || echo "WARNING: No such file $LOGFILE.9"
+      # do this first so that we log to $LOGFILE, not $LOGFILE.1
+      mv $LOGFILE $LOGFILE.tmp
+      echo "INFO: Rotating Logs. Moved $LOGFILE to $LOGFILE.1"
+      rotate_logs
+      mv $LOGFILE.tmp $LOGFILE.1
     end
-  end
-
-  for i in (seq 8 -1 1)
-    if test -f $LOGFILE.$i
-      set i_ (math "$i+1")
-      mv $LOGFILE.$i $LOGFILE.$i_ || echo "WARNING: No such file $LOGFILE.$i"
-    end
-  end
-
-  if test -f $LOGFILE 
-    mv $LOGFILE "$LOGFILE.1"
-  else 
-    echo "ERROR: no such logfile: $LOGFILE"
   end
 end
 
-rotate_logs &>> $LOGFILE
+function rotate_logs
+  for i in (seq 8 -1 1) # 8 7 .. 1
+    if test -f $LOGFILE.$i
+      echo "moving $LOGFILE.$i to $LOGFILE.$i_"
+      set i_ (math "$i+1")
+      mv $LOGFILE.$i $LOGFILE.$i_
+    end
+  end
+end
+
+rotate_logs_inpspect &>> $LOGFILE
