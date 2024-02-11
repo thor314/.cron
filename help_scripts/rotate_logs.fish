@@ -2,13 +2,13 @@
 # rotate the logs for a cron script
 
 set LOGFILE $argv[1]
-set ONE_MB 1048576 # bytes
+set MAX_SIZE 100000 # about 100kb, keep up to 1MB in history for each log in total
 
 function rotate_logs_inspect
   # If $LOGFILE is over 1mb in size, bump it back a number, and bump everything else back too
   if test -f $LOGFILE
     set size (wc -c $LOGFILE | string split " ")[1]
-    if test $size -ge $ONE_MB
+    if test $size -ge $MAX_SIZE
       # do this first so that we log to $LOGFILE, not $LOGFILE.1
       echo "INFO: $LOGFILE has size $size."
       rotate_logs
