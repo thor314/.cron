@@ -10,6 +10,9 @@ function tk-apt-update
   DEBIAN_FRONTEND=noninteractive apt-get update 
   apt-get -y upgrade 
   apt-get autoremove
+
+  echo "keychain --eval -Q from apt.fish"
+  echo (keychain --eval -Q)
 end
 
 tk-apt-update &>> $LOGFILE
