@@ -13,6 +13,7 @@ function init
   if not tk-keychain /home/thor/.ssh/id_ed25519
     echo "ERROR: failed to set up keychain" && exit 1
   end
+  echo "INFO: cron init successfully set up"
 end
 
 fish /home/thor/.cron/help_scripts/rotate_logs.fish $LOGFILE
