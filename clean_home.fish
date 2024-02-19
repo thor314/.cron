@@ -15,7 +15,7 @@ function clean_home
     end
   end
 
-  echo "cleaning dirs: $DIRS"
+  echo -e "\ncleaning dirs: $DIRS"
   for d in $DIRS
     if test -d $d
       echo "INFO: Removing dir: $d" 

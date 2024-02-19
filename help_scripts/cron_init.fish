@@ -5,8 +5,6 @@ set LOGFILE $argv[1]
 # sudo may get confused, wants an absolute path
 
 function init
-  fish /home/thor/.cron/help_scripts/rotate_logs.fish $LOGFILE
-
   # disable noisy errors that X display cannot be opened
   set -gx DISPLAY :0 
 
@@ -17,5 +15,6 @@ function init
   end
 end
 
+fish /home/thor/.cron/help_scripts/rotate_logs.fish $LOGFILE
 init &>> $LOGFILE
 

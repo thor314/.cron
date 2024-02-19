@@ -32,7 +32,8 @@ end
 
 # first rotate the base log
 if test -f $LOGFILE 
-  cat $LOGFILE >> $LOGFILE.1 && rm $LOGFILE
+  cat $LOGFILE >> $LOGFILE.1 
+  rm $LOGFILE
 end
 # then rotate history, if applicable
 rotate_logs &>> $LOGFILE
