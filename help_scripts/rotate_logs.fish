@@ -8,6 +8,7 @@ set LOGFILE $argv[1]
 set MAX_SIZE 100000 # about 100kb, keep up to 1MB in history for each log in total
 
 function rotate_logs -d "rotate the logs"
+  init_log_message
   set size_archive (wc -c $LOGFILE.1 | string split " ")[1]
   if test $size_archive -ge $MAX_SIZE
     echo "INFO: rotating log history"
@@ -19,7 +20,14 @@ function rotate_logs -d "rotate the logs"
         mv $LOGFILE.$i $LOGFILE.$i_
       end
     end
-  end
+  else ; echo "INFO: rotate_logs: no rotation required" ; end
+end
+
+function init_log_message
+  set COMMIT_MSG (hostname)-(date -u +%Y-%m-%d-%H:%M%Z)
+  echo -e "\n============================"
+  echo "cronlog: $COMMIT_MSG"
+  echo -e "============================\n"
 end
 
 # first rotate the base log
@@ -28,3 +36,4 @@ if test -f $LOGFILE
 end
 # then rotate history, if applicable
 rotate_logs &>> $LOGFILE
+

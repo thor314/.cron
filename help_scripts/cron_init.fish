@@ -5,16 +5,7 @@ set LOGFILE $argv[1]
 # sudo may get confused, wants an absolute path
 
 function init
-  if test -f $LOGFILE 
-    fish /home/thor/.cron/help_scripts/rotate_logs.fish $LOGFILE
-  else
-    echo "WARNING: creating new logfile" >> $LOGFILE 
-  end
-
-  set -gx COMMIT_MSG (hostname)-(date -u +%Y-%m-%d-%H:%M%Z)
-  echo -e "\n============================"
-  echo "cronlog: $COMMIT_MSG"
-  echo -e "============================\n"
+  fish /home/thor/.cron/help_scripts/rotate_logs.fish $LOGFILE
 
   # disable noisy errors that X display cannot be opened
   set -gx DISPLAY :0 
