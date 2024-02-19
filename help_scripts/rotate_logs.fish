@@ -8,13 +8,13 @@ set LOGFILE $argv[1]
 set MAX_SIZE 100000 # about 100kb, keep up to 1MB in history for each log in total
 
 function rotate_logs -d "rotate the logs"
-  set size_first_archive (wc -c $LOGFILE.1 | string split " ")[1]
-  if test $size_first_archive_1 -ge $MAX_SIZE
+  set size_archive (wc -c $LOGFILE.1 | string split " ")[1]
+  if test $size_archive -ge $MAX_SIZE
     echo "INFO: rotating log history"
     for i in (seq 8 -1 1) # 8 7 .. 1
       if test -f $LOGFILE.$i
         set i_ (math "$i+1")
-        echo "moving $LOGFILE.$i to $LOGFILE.$i_"
+        echo "INFO: moving $LOGFILE.$i to $LOGFILE.$i_"
         # implicitly overwrite $LOGFILE.9 if exists
         mv $LOGFILE.$i $LOGFILE.$i_
       end
