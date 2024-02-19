@@ -1,11 +1,22 @@
 #!/usr/bin/env fish
-# rotate the logs for a cron script
+# rotate the logs for a cron script.
+# $LOGFILE should contain only the most recent log. 
+# on creation of a new log, move the contents of $LOGFILE to append to $LOGFILE.1.
+# If $LOGFILE.1 exceeds $MAX_SIZE, rotate it to $LOGFILE.2, and so on.
 
 set LOGFILE $argv[1]
 set MAX_SIZE 100000 # about 100kb, keep up to 1MB in history for each log in total
 
+function rotate -d "rotate the logs"
+  if test -f $LOGFILE # 
+    cat $LOGFILE >> $LOGFILE.1 && rm $LOGFILE
+  end
+
+end
+
+
 function rotate_logs_inspect
-  # If $LOGFILE is over 1mb in size, bump it back a number, and bump everything else back too
+  # If $LOGFILE is over $MAX_SIZE, bump it back a number, and bump everything else back too
   if test -f $LOGFILE
     set size (wc -c $LOGFILE | string split " ")[1]
     if test $size -ge $MAX_SIZE
@@ -32,3 +43,4 @@ function rotate_logs
 end
 
 rotate_logs_inspect &>> $LOGFILE
+# rotate &>> $LOGFILE
