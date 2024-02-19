@@ -11,8 +11,8 @@ function notify-log-failures
     echo -e "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     echo "INFO: searching logfile $f for issues"
     echo -e "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
-    # search $f for instances of warning or error strings
-    rg -A2 "(W:|fatal|WARNING|ERROR|bad|exit|terminate|E:)" $f
+    # search $f for instances of warning or error strings, ignore case
+    rg -A2 -i "(w:|fatal|warning|error|bad|exit|terminate|e:)" $f
   end 
 end
 
