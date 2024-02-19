@@ -67,8 +67,8 @@ function update -d "Commits changes. Assumes that there are changes to commit. O
   end
 end
 
+fish ~/.cron/help_scripts/cron_init.fish $LOGFILE
 if test -d $HOME/gm
-  fish ~/.cron/help_scripts/cron_init.fish $LOGFILE
   recurse-to-bottom $HOME/gm 
 else
   echo "ERROR: gm not found"       

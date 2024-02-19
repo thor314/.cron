@@ -5,7 +5,6 @@
 set LOGFILE /home/thor/.cron/logs/notify_log_failures.log
 
 function notify-log-failures
-  fish /home/thor/.cron/help_scripts/cron_init.fish $LOGFILE
   set logfiles (ls /home/thor/.cron/logs | rg ".*\.log\$")
   for f in $logfiles 
     echo -e "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -16,5 +15,5 @@ function notify-log-failures
   end 
 end
 
+fish /home/thor/.cron/help_scripts/cron_init.fish $LOGFILE
 notify-log-failures &>> $LOGFILE
-

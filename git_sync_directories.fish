@@ -78,8 +78,8 @@ function update-submodules
   echo "********************************"
 end
 
+fish ~/.cron/help_scripts/cron_init.fish $LOGFILE
 if set -q DIRS 
-  fish ~/.cron/help_scripts/cron_init.fish $LOGFILE
   update-dirs $DIRS -c
   echo -e "INFO: \nFinished syncing commit dirs\n" 
   update-dirs $DIRS_NOCOMMIT 
