@@ -11,10 +11,10 @@ function notify-log-failures
     echo -e "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     echo "INFO: searching logfile $f for issues"
     echo -e "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
-    # search f for instances of warning or error strings
-    rg -C2 "(W:|fatal|WARNING|ERROR|bad|exit|terminate|E:)"  $f
-  echo $f; end
+    # search $f for instances of warning or error strings
+    rg -A2 "(W:|fatal|WARNING|ERROR|bad|exit|terminate|E:)" $f
+  end 
 end
 
-tk-apt-update &>> $LOGFILE
+notify-log-failures &>> $LOGFILE
 
