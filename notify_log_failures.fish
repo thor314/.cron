@@ -19,5 +19,6 @@ function notify-log-failures
   echo "INFO: finished searching logs for failures"
 end
 
+sleep 40 # wait for other crons that run every 10 minutes to finish
 fish /home/thor/.cron/help_scripts/cron_init.fish $LOGFILE
 notify-log-failures &>> $LOGFILE
