@@ -38,7 +38,7 @@ end
   
 if not command -s hackmd-cli -q
   # nvm use latest
-  npm install -g hackmd-cli
+  npm install -g @hackmd/hackmd-cli
 end
 
 if not command -s tsc -q # a gizmo to give me linux cli instructions from the command line
