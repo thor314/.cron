@@ -1,7 +1,8 @@
 # every 10 minutes
 */10 * * * * /usr/bin/fish /home/thor/.cron/clean_home.fish 
-*/10 * * * * /usr/bin/fish /home/thor/.cron/git_sync_directories.fish 
-*/10 * * * * /usr/bin/fish /home/thor/.cron/notify_log_failures.fish 
+# every hour
+* */1 * * * /usr/bin/fish /home/thor/.cron/git_sync_directories.fish 
+* */1 * * * /usr/bin/fish /home/thor/.cron/notify_log_failures.fish
 # every 6 hours 
 0 */6 * * * /usr/bin/fish /home/thor/.cron/sync_updates.fish 
 0 */6 * * * /usr/bin/fish /home/thor/.cron/git_merkle.fish 
@@ -9,8 +10,4 @@
 0 */6 * * * /usr/bin/fish /home/thor/.cron/github_name.fish
 0 */6 * * * /usr/bin/fish /home/thor/.cron/flatpak_update.fish
 0 */6 * * * /usr/bin/fish /home/thor/.cron/rustup_update.fish
-
-# sudo crontab:
-# every 6 hours 
-0 */6 * * * /usr/bin/fish /home/thor/.cron/apt.fish
 
