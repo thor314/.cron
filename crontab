@@ -7,5 +7,5 @@
 0 14 * * * /usr/bin/fish /home/thor/.cron/scripts/flatpak_update.fish
 0 14 * * * /usr/bin/fish /home/thor/.cron/scripts/rustup_update.fish
 # only boorb:
-* 14 * * * /usr/bin/fish /home/thor/.cron/scripts/github_name.fish 
+0 14 * * * /usr/bin/fish /home/t/.cron/scripts/github_name.fish 
 
