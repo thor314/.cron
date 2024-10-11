@@ -1,15 +1,11 @@
-# every 10 minutes
-*/10 * * * * /usr/bin/fish /home/thor/.cron/clean_home.fish 
+# note: verify user $HOME is /home/thor
 # every hour
-0 * * * * /usr/bin/fish /home/thor/.cron/git_sync_directories.fish 
-0 * * * * /usr/bin/fish /home/thor/.cron/notify_log_failures.fish
-# every 6 hours 
-0 */6 * * * /usr/bin/fish /home/thor/.cron/sync_updates.fish 
-0 */6 * * * /usr/bin/fish /home/thor/.cron/git_merkle.fish 
-0 */6 * * * /usr/bin/fish /home/thor/.cron/run_tk_blog_publish.fish 
-0 */6 * * * /usr/bin/fish /home/thor/.cron/flatpak_update.fish
-0 */6 * * * /usr/bin/fish /home/thor/.cron/rustup_update.fish
+0 * * * * /usr/bin/fish /home/thor/.cron/scripts/clean_home.fish 
 
-# only on boorb: every day at 2am
-0 2 * * * /usr/bin/fish /home/thor/.cron/github_name.fish
+# every day at 2pm
+0 14 * * * /usr/bin/fish /home/thor/.cron/scripts/git_sync_directories.fish 
+0 14 * * * /usr/bin/fish /home/thor/.cron/scripts/flatpak_update.fish
+0 14 * * * /usr/bin/fish /home/thor/.cron/scripts/rustup_update.fish
+# only boorb:
+* 14 * * * /usr/bin/fish /home/thor/.cron/scripts/github_name.fish 
 
