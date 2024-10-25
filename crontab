@@ -1,11 +1,11 @@
 # note: verify user $HOME is /home/thor
-# every hour
-0 * * * * /usr/bin/fish /home/thor/.cron/scripts/clean_home.fish 
+# every half hour, clean nonsense in my home and pull down changes in these dirs
+*/30 * * * * /usr/bin/fish /home/thor/.cron/scripts/clean_home.fish 
+*/30 * * * * /usr/bin/fish /home/thor/.cron/scripts/git_sync_directories.fish 
 
-# every day at 2pm
-0 14 * * * /usr/bin/fish /home/thor/.cron/scripts/git_sync_directories.fish 
-0 14 * * * /usr/bin/fish /home/thor/.cron/scripts/flatpak_update.fish
-0 14 * * * /usr/bin/fish /home/thor/.cron/scripts/rustup_update.fish
+# try a few times each day 
+0 8,12,16 * * * /usr/bin/fish /home/thor/.cron/scripts/flatpak_update.fish
+0 8,12,16 * * * /usr/bin/fish /home/thor/.cron/scripts/rustup_update.fish
 # only boorb:
-0 14 * * * /usr/bin/fish /home/t/.cron/scripts/github_name.fish 
+0 8,12,16 * * * /usr/bin/fish /home/t/.cron/scripts/github_name.fish 
 
