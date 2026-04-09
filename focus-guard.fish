@@ -432,7 +432,7 @@ function show_status
         if test -n "$last_close" -a -n "$cd_min"
             set -l now_ts (date '+%s')
             set -l elapsed (math --scale=1 "($now_ts - $last_close) / 60")
-            if test (math "$elapsed < $cd_min") -eq 1
+            if test "$elapsed -lt $cd_min"
                 set -l remaining (math --scale=0 "$cd_min - $elapsed")
                 set cooldown_info "  cooldown: {$remaining}m left"
             end
