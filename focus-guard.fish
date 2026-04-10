@@ -413,27 +413,27 @@ function show_status
         set -l usage_sec (get_daily_usage $app)
         set -l usage_min (math --scale=1 "$usage_sec / 60")
         set -l daily_limit (get_daily_limit $app)
-        test -z "$daily_limit"; and set daily_limit "∞"
+        test -z $daily_limit; and set daily_limit "∞"
 
         set -l session_info ""
         set -l session_start (get_session_start $app)
-        if test -n "$session_start"
+        if test -n $session_start
             set -l now_ts (date '+%s')
             set -l s_min (math --scale=1 "($now_ts - $session_start) / 60")
             set -l s_limit (get_session_limit $app)
-            test -z "$s_limit"; and set s_limit "∞"
-            set session_info "  session: {$s_min}m / {$s_limit}m"
+            test -z $s_limit; and set s_limit "∞"
+            set session_info (string join "" "  session: $s_min" "m / $s_limit" "m")
         end
 
         set -l cooldown_info ""
         set -l last_close (get_last_close $app)
         set -l cd_min (get_cooldown $app)
-        if test -n "$last_close" -a -n "$cd_min"
+        if test -n $last_close -a -n $cd_min
             set -l now_ts (date '+%s')
             set -l elapsed (math --scale=1 "($now_ts - $last_close) / 60")
-            if test "$elapsed -lt $cd_min"
+            if test $elapsed -lt $cd_min
                 set -l remaining (math --scale=0 "$cd_min - $elapsed")
-                set cooldown_info "  cooldown: {$remaining}m left"
+                set cooldown_info (string join "" "  cooldown: $remaining" "m left")
             end
         end
 
@@ -442,7 +442,7 @@ function show_status
             set focus "  [FOCUS BLOCKED]"
         end
 
-        echo "  $app: $running  daily: {$usage_min}m / {$daily_limit}m$session_info$cooldown_info$focus"
+        echo   $app: $running  daily: {$usage_min}m / {$daily_limit}m$session_info$cooldown_info$focus
     end
 end
 
