@@ -356,7 +356,6 @@ function run_loop
 
                 # 2. Cooldown check
                 if check_cooldown $app
-                    set_last_close $app (date '+%s')
                     clear_session $app
                     continue
                 end
@@ -481,8 +480,12 @@ switch "$argv[1]"
         for f in $STATE_DIR/*.daily.*
             rm -f $f
         end
-        log_msg "daily counters reset"
-        echo "daily counters reset"
+        for app in (all_managed_apps)
+            rm -f (state_file $app "last_close")
+            clear_session $app
+        end
+        log_msg "daily counters, cooldowns, and sessions reset"
+        echo "daily counters, cooldowns, and sessions reset"
 
     case --clear-sessions
         for app in (all_managed_apps)
