@@ -10,11 +10,11 @@
 #   - Cooldown: minimum time between app sessions
 #
 # Usage:
-#   ./focus-guard.fish              # run in foreground
-#   ./focus-guard.fish --daemon     # run in background
-#   ./focus-guard.fish --status     # show current usage stats
-#   ./focus-guard.fish --reset      # reset daily counters
-#   ./focus-guard.fish --clear-sessions # clear stale session counters
+#   ./focus-guard.fish                  # run in foreground
+#   ./focus-guard.fish --daemon         # run in background
+#   ./focus-guard.fish --status         # show current usage stats
+#   ./focus-guard.fish --reset          # reset daily counters
+#   ./focus-guard.fish --cooldown       # reset cooldown period
 #
 # Config: edit the configure() function below.
 # State: stored in ~/.local/share/focus-guard/
@@ -150,11 +150,6 @@ function set_session_start -a app -a ts
     write_state $app "session_start" $ts
 end
 
-function clear_session -a app
-    rm -f (state_file $app "session_start")
-    rm -f (state_file $app "warned_30")
-    rm -f (state_file $app "warned_10")
-end
 
 # Last close time (unix timestamp)
 function get_last_close -a app
@@ -487,12 +482,12 @@ switch "$argv[1]"
         log_msg "daily counters, cooldowns, and sessions reset"
         echo "daily counters, cooldowns, and sessions reset"
 
-    case --clear-sessions
+    case --cooldown
         for app in (all_managed_apps)
-            clear_session $app
+            rm -f (state_file $app "last_close")
         end
-        log_msg "stale sessions cleared"
-        echo "stale sessions cleared"
+        log_msg "cooldowns reset"
+        echo "cooldowns reset"
     case --help -h
         echo "usage: focus-guard.fish [--daemon|--status|--reset|--help]"
         echo ""
@@ -500,7 +495,7 @@ switch "$argv[1]"
         echo "  --daemon    run in background"
         echo "  --status    show current usage stats"
         echo "  --reset     reset daily counters"
-        echo "  --clear-sessions  clear stale session timers"
+        echo "  --cooldown  reset cooldown periods"
 
     case '*'
         cleanup_old_state
