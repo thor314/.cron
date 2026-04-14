@@ -169,6 +169,13 @@ function set_warned -a app -a level
     write_state $app "warned_$level" "1"
 end
 
+function clear_session -a app
+    rm -f (state_file $app "session_start")
+    rm -f (state_file $app "warned_30")
+    rm -f (state_file $app "warned_10")
+end
+
+
 # ============================================================
 # RULE LOOKUPS
 # ============================================================
